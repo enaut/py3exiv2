@@ -37,10 +37,10 @@ import codecs
 
 import libexiv2python
 
-from pyexiv2.exif import ExifTag, ExifThumbnail
-from pyexiv2.iptc import IptcTag
-from pyexiv2.xmp import XmpTag
-from pyexiv2.preview import Preview
+from py3exiv2.exif import ExifTag, ExifThumbnail
+from py3exiv2.iptc import IptcTag
+from py3exiv2.xmp import XmpTag
+from py3exiv2.preview import Preview
 
 
 class ImageMetadata(MutableMapping):
