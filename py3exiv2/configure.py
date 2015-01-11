@@ -12,7 +12,20 @@ from distutils.sysconfig import get_python_inc, get_python_lib
 import subprocess
 
 if sys.version_info[0] < 3:
-    sys.exit('ERROR: py3exiv2 requires Python ≥ 3 Exiting.')
+    sys.exit('ERROR: py3exiv2 requires Python ≥ 3.3')
+
+def show_help():
+    help = """
+    configure.py\n
+    Script to configure the compilation and the installation of py3exiv2.\n
+    This script require Python >= 3.3\n
+    Usage:  python3 configure.py [OPTION]\n
+    Options:
+    -h               Show this info and exit.
+    --libboost=FILE  Define the path of libboost_python-3\n
+"""
+    print(help)
+    sys.exit()
 
 def get_libboost_name():
     """Returns the name of the lib libboost_python 3
@@ -73,9 +86,9 @@ if __name__ == '__main__':
         if arg == '-h':
             show_help()
 
-        else arg.startswith('libboost='):
-            _, path = arg.split('=').strip()
-            if not os path.isfile(path):
+        elif arg.startswith('--libboost='):
+            _, path = arg.split('=')
+            if not os.path.isfile(path.strip()):
                 print('No such file: %s' % path)
                 sys.exit()
 
