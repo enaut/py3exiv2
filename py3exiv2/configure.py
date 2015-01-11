@@ -69,10 +69,24 @@ fi""" % dct
 
 if __name__ == '__main__':
     dct = {}
-    dct['boost'] = get_libboost_name()
-    if dct['boost'] is None:
-        print("Can't find libboost_python")
-        sys.exit()
+    for arg in sys.argv:
+        if arg == '-h':
+            show_help()
+
+        else arg.startswith('libboost='):
+            _, path = arg.split('=').strip()
+            if not os path.isfile(path):
+                print('No such file: %s' % path)
+                sys.exit()
+
+            else:
+                dct['boost'] = path
+
+    if not dct:
+        dct['boost'] = get_libboost_name()
+        if dct['boost'] is None:
+            print("Can't find libboost_python")
+            sys.exit()
 
     dct['py'] = get_python_inc()
     dct['dist'] = get_python_lib()
