@@ -57,13 +57,13 @@ if [ "$1" = "-i" ]; then
     echo "install libexiv2python.so to %(dist)s"
     cp build/libexiv2python.so %(dist)s/libexiv2python.so
     test -d %(pyexiv)s || mkdir -p %(pyexiv)s
-    sudo cp src/pyexiv2/__init__.py %(pyexiv)s/__init__.py
-    sudo cp src/pyexiv2/exif.py %(pyexiv)s/exif.py
-    sudo cp src/pyexiv2/iptc.py %(pyexiv)s/iptc.py
-    sudo cp src/pyexiv2/metadata.py %(pyexiv)s/metadata.py
-    sudo cp src/pyexiv2/preview.py %(pyexiv)s/preview.py
-    sudo cp src/pyexiv2/utils.py %(pyexiv)s/utils.py
-    sudo cp src/pyexiv2/xmp.py %(pyexiv)s/xmp.py
+    cp src/pyexiv2/__init__.py %(pyexiv)s/__init__.py
+    cp src/pyexiv2/exif.py %(pyexiv)s/exif.py
+    cp src/pyexiv2/iptc.py %(pyexiv)s/iptc.py
+    cp src/pyexiv2/metadata.py %(pyexiv)s/metadata.py
+    cp src/pyexiv2/preview.py %(pyexiv)s/preview.py
+    cp src/pyexiv2/utils.py %(pyexiv)s/utils.py
+    cp src/pyexiv2/xmp.py %(pyexiv)s/xmp.py
 
 else
     test -d build || mkdir -p build
@@ -91,8 +91,7 @@ if __name__ == '__main__':
                 print('No such file: %s' % path)
                 sys.exit()
 
-            else:
-                dct['boost'] = path
+            dct['boost'] = path
 
     if not dct:
         dct['boost'] = get_libboost_name()
