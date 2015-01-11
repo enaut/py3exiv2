@@ -36,17 +36,16 @@ def get_libboost_name():
                             'libboost_python*'], 
                             stdout=subprocess.PIPE).communicate()[0]
     if not rep:
-        print("Can't find libboost_python")
+        return
 
-    else:
-        # rep is type bytes
-        libs = rep.decode(sys.getfilesystemencoding()).split('\n')
-        for l in libs:
-            _, l = os.path.split(l)
-            if l.endswith('.so'):
-                l = l[:-3]
-                if '-py3' in l:
-                    return l.replace('libboost', 'lboost')
+    # rep is type bytes
+    libs = rep.decode(sys.getfilesystemencoding()).split('\n')
+    for l in libs:
+        _, l = os.path.split(l)
+        if l.endswith('.so'):
+            l = l[:-3]
+            if '-py3' in l:
+                return l.replace('libboost', 'lboost')
 
 def write_build_file(dct):
     dct['wrp'] = 'exiv2wrapper'
@@ -82,13 +81,13 @@ fi""" % dct
 
 if __name__ == '__main__':
     dct = {}
-    for arg in sys.argv:
+    for arg in sys.argv[1:]:
         if arg == '-h':
             show_help()
 
         elif arg.startswith('--libboost='):
-            _, path = arg.split('=')
-            if not os.path.isfile(path.strip()):
+            path = arg.split('=')[1].strip()
+            if not os.path.isfile(path):
                 print('No such file: %s' % path)
                 sys.exit()
 
@@ -98,7 +97,7 @@ if __name__ == '__main__':
     if not dct:
         dct['boost'] = get_libboost_name()
         if dct['boost'] is None:
-            print("Can't find libboost_python")
+            print("Can't find libboost_python-3, use the option --libboost=FILE"")
             sys.exit()
 
     dct['py'] = get_python_inc()
