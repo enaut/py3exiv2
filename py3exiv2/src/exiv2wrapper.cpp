@@ -1304,6 +1304,22 @@ void translateExiv2Error(Exiv2::Error const& error)
             // May be raised by writeMetadata() (TIFF)
             PyErr_SetString(PyExc_IOError, message);
             break;
+        // Added in py3exiv2
+        case 50:
+            // Multiple TIFF array element tags %1 in one directory")
+            // May be raised by readMetadata() (TIFF)
+            PyErr_SetString(PyExc_IOError, message);
+            break;
+        case 51:
+            // TIFF array element tag %1 has wrong type") }, // %1=tag number
+            // May be raised by readMetadata() (TIFF)
+            PyErr_SetString(PyExc_TypeError, message);
+            break;
+        case 52:
+            // %1 has invalid XMP value type `%2'
+            // May be raised by readMetadata() when reading the XMP data
+            PyErr_SetString(PyExc_ValueError, message);
+            break;
 
         // Custom error codes
         case METADATA_NOT_READ:
