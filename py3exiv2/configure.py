@@ -97,7 +97,7 @@ if __name__ == '__main__':
     if not dct:
         dct['boost'] = get_libboost_name()
         if dct['boost'] is None:
-            print("Can't find libboost_python-3, use the option --libboost=FILE"")
+            print("Can't find libboost_python-3, use the option --libboost=FILE")
             sys.exit()
 
     dct['py'] = get_python_inc()
