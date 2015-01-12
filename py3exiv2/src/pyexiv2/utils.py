@@ -33,15 +33,7 @@ Utilitary classes and functions.
 import datetime
 import re
 
-# pyexiv2 uses fractions.Fraction when available (Python ≥ 2.6), or falls back
-# on the custom Rational class. This should be transparent to the application
-# developer as both classes have a similar API.
-# This module contains convenience functions to ease manipulation of fractions.
-try:
-    from fractions import Fraction
-except ImportError:
-    Fraction = None
-
+from fractions import Fraction
 
 class FixedOffset(datetime.tzinfo):
 
@@ -166,165 +158,60 @@ def string_to_undefined(sequence):
     :return: the corresponding undefined string
     :rtype: string
     """
-    #return ''.join(map(lambda x: '%d ' % ord(x), sequence)).rstrip()
-    #FIXME
-    print('utils.py string_to_undefined value: %s type: %s' 
-            %(sequence, type(sequence)))
-    return ''.join(map(lambda x: '%d ' % ord(x), sequence)).rstrip()
-
-
-class Rational(object):
-
-    """
-    A class representing a rational number.
-
-    Its numerator and denominator are read-only properties.
-
-    Do not use this class directly to instantiate a rational number.
-    Instead, use :func:`make_fraction`.
-    """
-
-    _format_re = re.compile(r'(?P<numerator>-?\d+)/(?P<denominator>\d+)')
-
-    def __init__(self, numerator, denominator):
-        """
-        :param numerator: the numerator
-        :type numerator: long
-        :param denominator: the denominator
-        :type denominator: long
-
-        :raise ZeroDivisionError: if the denominator equals zero
-        """
-        if denominator == 0:
-            msg = 'Denominator of a rational number cannot be zero.'
-            raise ZeroDivisionError(msg)
-        self._numerator = int(numerator)
-        self._denominator = int(denominator)
-
-    @property
-    def numerator(self):
-        """The numerator of the rational number."""
-        return self._numerator
-
-    @property
-    def denominator(self):
-        """The denominator of the rational number."""
-        return self._denominator
-
-    @staticmethod
-    def match_string(string):
-        """
-        Match a string against the expected format for a :class:`Rational`
-        (``[-]numerator/denominator``) and return the numerator and denominator
-        as a tuple.
-
-        :param string: a string representation of a rational number
-        :type string: string
-
-        :return: a tuple (numerator, denominator)
-        :rtype: tuple of long
-
-        :raise ValueError: if the format of the string is invalid
-        """
-        match = Rational._format_re.match(string)
-        if match is None:
-            raise ValueError('Invalid format for a rational: %s' % string)
-        gd = match.groupdict()
-        return (int(gd['numerator']), int(gd['denominator']))
-
-    @staticmethod
-    def from_string(string):
-        """
-        Instantiate a :class:`Rational` from a string formatted as
-        ``[-]numerator/denominator``.
-
-        :param string: a string representation of a rational number
-        :type string: string
-
-        :return: the rational number parsed
-        :rtype: :class:`Rational`
-
-        :raise ValueError: if the format of the string is invalid
-        """
-        numerator, denominator = Rational.match_string(string)
-        return Rational(numerator, denominator)
-
-    def to_float(self):
-        """
-        :return: a floating point number approximation of the value
-        :rtype: float
-        """
-        return float(self._numerator) / self._denominator
-
-    def __eq__(self, other):
-        """
-        Compare two rational numbers for equality.
-
-        Two rational numbers are equal if their reduced forms are equal.
-
-        :param other: the rational number to compare to self for equality
-        :type other: :class:`Rational`
-        
-        :return: True if equal, False otherwise
-        :rtype: boolean
-        """
-        return (self._numerator * other._denominator) == \
-               (other._numerator * self._denominator)
-
-    def __str__(self):
-        """
-        :return: a string representation of the rational number
-        :rtype: string
-        """
-        return '%d/%d' % (self._numerator, self._denominator)
-
-    def __repr__(self):
-        """
-        :return: the official string representation of the object
-        :rtype: string
-        """
-        return '%s(%d, %d)' % (self.__class__.__name__, self._numerator, self._denominator)
-
-
+    return " ".join([str(ord(s)) for s in seq])
 
 def is_fraction(obj):
     """
     Test whether the object is a valid fraction.
     """
-    if Fraction is not None and isinstance(obj, Fraction):
-        return True
-    elif isinstance(obj, Rational):
-        return True
-    else:
-        return False
+    return isinstance(obj, Fraction)
 
+def match_string(string):
+    """
+    Match a string against the expected format for a :class:`Fraction`
+    (``[-]numerator/denominator``) and return the numerator and denominator
+    as a tuple.
+
+    :param string: a string representation of a rational number
+    :type string: string
+
+    :return: a tuple (numerator, denominator)
+    :rtype: tuple of long
+
+    :raise ValueError: if the format of the string is invalid
+    """
+    format_re = re.compile(r'(?P<numerator>-?\d+)/(?P<denominator>\d+)')
+    match = format_re.match(string)
+    if match is None:
+        raise ValueError('Invalid format for a rational: %s' % string)
+
+    gd = match.groupdict()
+    return (int(gd['numerator']), int(gd['denominator']))
 
 def make_fraction(*args):
     """
     Make a fraction.
 
-    The type of the returned object depends on the availability of the
-    fractions module in the standard library (Python ≥ 2.6).
-
     :raise TypeError: if the arguments do not match the expected format for a
                       fraction
     """
     if len(args) == 1:
-        numerator, denominator = Rational.match_string(args[0])
+        numerator, denominator = match_string(args[0])
+
     elif len(args) == 2:
         numerator = args[0]
         denominator = args[1]
+
     else:
         raise TypeError('Invalid format for a fraction: %s' % str(args))
+
     if denominator == 0 and numerator == 0:
         # Null rationals are often stored as '0/0'.
         # We want to be fault-tolerant in this specific case
         # (see https://bugs.launchpad.net/pyexiv2/+bug/786253).
         denominator = 1
-    if Fraction is not None:
-        return Fraction(numerator, denominator)
-    else:
-        return Rational(numerator, denominator)
+
+    return Fraction(numerator, denominator)
 
 
 def fraction_to_string(fraction):
@@ -335,11 +222,10 @@ def fraction_to_string(fraction):
 
     :raise TypeError: if the argument is not a valid fraction
     """
-    if Fraction is not None and isinstance(fraction, Fraction):
+    if isinstance(fraction, Fraction):
         # fractions.Fraction.__str__ returns '0' for a null numerator.
         return '%s/%s' % (fraction.numerator, fraction.denominator)
-    elif isinstance(fraction, Rational):
-        return str(fraction)
+
     else:
         raise TypeError('Not a fraction')
 
