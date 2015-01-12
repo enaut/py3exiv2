@@ -99,8 +99,10 @@ class ExifTag(ListenerInterface):
         super(ExifTag, self).__init__()
         if _tag is not None:
             self._tag = _tag
+
         else:
             self._tag = libexiv2python._ExifTag(key)
+
         self._raw_value = None
         self._value = None
         self._value_cookie = False
@@ -187,7 +189,7 @@ class ExifTag(ListenerInterface):
 
     def _get_value(self):
         if self._value_cookie:
-            self._compute_value() 
+            self._compute_value()
         return self._value
 
     def _set_value(self, value):
@@ -230,32 +232,24 @@ class ExifTag(ListenerInterface):
         # Implementation of the ListenerInterface.
         # React on changes to the list of values of the tag.
         # self._value is a list of values and its contents changed.
-        print('exif.contents_changed: %s' % self._value)
         self._set_value(self._value)
 
     def _match_encoding(self, charset):
+        # charset see:
+        # http://www.exiv2.org/doc/classExiv2_1_1CommentValue.html
+        # enum  	CharsetId {
+        #           ascii, jis, unicode, undefined,
+        #           invalidCharsetId, lastCharsetId } 
         encoding = sys.getdefaultencoding()
-        if charset == 'Ascii':
+        if charset in ('Ascii', 'ascii'):
             encoding = 'ascii'
-        elif charset == 'Jis':
+
+        elif charset in ('Jis', 'jis'):
             encoding = 'shift_jis'
-        elif charset == 'Unicode':
-            # Starting from 0.20, exiv2 converts unicode comments to UTF-8
-            from pyexiv2 import __exiv2_version__
-            if __exiv2_version__ >= '0.20':
-                encoding = 'utf-8'
-            else:
-                byte_order = self._tag._getByteOrder()
-                if byte_order == 1:
-                    # little endian (II)
-                    encoding = 'utf-16le'
-                elif byte_order == 2:
-                    # big endian (MM)
-                    encoding = 'utf-16be'
-        elif charset == 'Undefined':
-            pass
-        elif charset == 'InvalidCharsetId':
-            pass
+
+        elif charset in ('Unicode', 'unicode'):
+            encoding = 'utf-8'
+
         return encoding
 
     def _convert_to_python(self, value):
@@ -270,8 +264,6 @@ class ExifTag(ListenerInterface):
         :raise ExifValueError: if the conversion fails
         """
         if self.type == 'Ascii':
-            print('exif.py _convert_to_string Ascii value: %s type: %s' % 
-                        (value, type(value)))
             # The value may contain a Datetime
             for format in self._datetime_formats:
                 try:
@@ -298,19 +290,27 @@ class ExifTag(ListenerInterface):
             return value
 
         elif self.type == 'Comment':
-            
             if value.startswith('charset='):
                 charset, val = value.split(' ', 1)
-                print('exif._convert_to_python value: %s type: %s' % (val, type(val)))
+                if isinstance(val, str):
+                    return val
+
                 charset = charset.split('=')[1].strip('"')
                 encoding = self._match_encoding(charset)
-                return val.encode(encoding, 'replace')
+                return val.decode(encoding, 'replace')
+
             else:
                 # No encoding defined.
-                try:
-                    return value.encode('utf-8')
-                except UnicodeError:
+                if isinstance(value, str):
                     return value
+
+                elif isinstance(value, bytes):
+                    try:
+                        return value.decode('utf-8')
+                    except UnicodeError:
+                        pass
+
+            return value
 
         elif self.type in ('Short', 'SShort'):
             try:
@@ -329,6 +329,7 @@ class ExifTag(ListenerInterface):
                 r = make_fraction(value)
             except (ValueError, ZeroDivisionError):
                 raise ExifValueError(value, self.type)
+
             else:
                 if self.type == 'Rational' and r.numerator < 0:
                     raise ExifValueError(value, self.type)
@@ -357,15 +358,16 @@ class ExifTag(ListenerInterface):
         if self.type == 'Ascii':
             if isinstance(value, datetime.datetime):
                 return DateTimeFormatter.exif(value)
+
             elif isinstance(value, datetime.date):
                 if self.key == 'Exif.GPSInfo.GPSDateStamp':
                     # Special case
                     return DateTimeFormatter.exif(value)
+
                 else:
                     return '%s 00:00:00' % DateTimeFormatter.exif(value)
+
             else:
-                print('exif.py _convert_to_string Ascii value: %s type: %s' % 
-                        (value, type(value)))
                 return value
 
         elif self.type in ('Byte', 'SByte'):
@@ -374,71 +376,55 @@ class ExifTag(ListenerInterface):
                     return value.encode('utf-8')
                 except UnicodeEncodeError:
                     raise ExifValueError(value, self.type)
+
             elif isinstance(value, bytes):
-                print('exif.py _convert_to_string 1 bytes value: %s' % value)
                 return value
+
             else:
                 raise ExifValueError(value, self.type)
 
         elif self.type == 'Comment':
-            if value is not None and self.raw_value is not None and \
-                self.raw_value.startswith('charset='):
-                charset, val = self.raw_value.split(' ', 1)
-                charset = charset.split('=')[1].strip('"')
-                encoding = self._match_encoding(charset)
-                try:
-                    val = value.encode(encoding)
-                except UnicodeError:
-                    # Best effort, do not fail just because the original
-                    # encoding of the tag cannot encode the new value.
-                    pass
-                else:
-                    return 'charset="%s" %s' % (charset, val)
-
-            if isinstance(value, str):
-                try:
-                    return value.encode('utf-8')
-                except UnicodeEncodeError:
-                    raise ExifValueError(value, self.type)
-            elif isinstance(value, bytes):
-                print('exif.py _convert_to_string 1 bytes value: %s' % value)
-                return value
-            else:
-                raise ExifValueError(value, self.type)
+            return self._convert_to_bytes(value)
 
         elif self.type == 'Short':
             if isinstance(value, int) and value >= 0:
                 return str(value)
+
             else:
                 raise ExifValueError(value, self.type)
 
         elif self.type == 'SShort':
             if isinstance(value, int):
                 return str(value)
+
             else:
                 raise ExifValueError(value, self.type)
 
         elif self.type == 'Long':
             if isinstance(value, int) and value >= 0:
                 return str(value)
+
             else:
                 raise ExifValueError(value, self.type)
 
         elif self.type == 'SLong':
             if isinstance(value, int):
                 return str(value)
+
             else:
                 raise ExifValueError(value, self.type)
 
         elif self.type == 'Rational':
             if is_fraction(value) and value.numerator >= 0:
                 return fraction_to_string(value)
+
             else:
                 raise ExifValueError(value, self.type)
 
         elif self.type == 'SRational':
             if is_fraction(value):
                 return fraction_to_string(value)
+
             else:
                 raise ExifValueError(value, self.type)
 
@@ -448,14 +434,45 @@ class ExifTag(ListenerInterface):
                     return string_to_undefined(value.encode('utf-8'))
                 except UnicodeEncodeError:
                     raise ExifValueError(value, self.type)
+
             elif isinstance(value, bytes):
                 # FIXME 
                 print('exif.py _convert_to_string 2 bytes value: %s' % value)
                 return string_to_undefined(value)
+
             else:
                 raise ExifValueError(value, self.type)
 
         raise ExifValueError(value, self.type)
+
+    def _convert_to_bytes(self, value):
+        if value is None:
+            return
+
+        if isinstance(value, str):
+            if value.startswith('charset='):
+                charset, val = value.split(' ', 1)
+                charset = charset.split('=')[1].strip('"')
+                encoding = self._match_encoding(charset)
+
+            else:
+                encoding = 'utf-8'
+                charset = 'Unicode'
+
+            try:
+                val = value.encode(encoding)
+            except UnicodeError:
+                pass
+
+            else:
+                self._set_raw_value('charset=%s %s' % (charset, val))
+                return val
+
+        elif isinstance(value, bytes):
+            return value
+
+        else:
+            raise ExifValueError(value, self.type)
 
     def __str__(self):
         """
@@ -465,10 +482,13 @@ class ExifTag(ListenerInterface):
         left = '%s [%s]' % (self.key, self.type)
         if self._raw_value is None:
             right = '(No value)'
+
         elif self.type == 'Undefined' and len(self._raw_value) > 100:
             right = '(Binary value suppressed)'
+
         else:
              right = self._raw_value
+
         return '<%s = %s>' % (left, right)
 
     # Support for pickling.
