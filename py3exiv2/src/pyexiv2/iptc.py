@@ -177,21 +177,6 @@ class IptcTag(ListenerInterface):
     raw_value = property(fget=_get_raw_values, fset=_set_raw_values,
                          doc='The raw values of the tag as a list of strings.')
 
-    def _get_raw_values_deprecated(self):
-        msg = "The 'raw_values' property is deprecated, " \
-              "use the 'raw_value' property instead."
-        warnings.warn(msg, category=DeprecationWarning, stacklevel=2)
-        return self._get_raw_values()
-
-    def _set_raw_values_deprecated(self, values):
-        msg = "The 'raw_values' property is deprecated, " \
-              "use the 'raw_value' property instead."
-        warnings.warn(msg, category=DeprecationWarning, stacklevel=2)
-        return self._set_raw_values(values)
-
-    raw_values = property(fget=_get_raw_values_deprecated,
-                          fset=_set_raw_values_deprecated)
-
     def _compute_values(self):
         # Lazy computation of the values from the raw values
         self._values = NotifyingList([self._convert_to_python(v) 
