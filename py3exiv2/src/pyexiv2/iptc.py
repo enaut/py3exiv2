@@ -192,6 +192,7 @@ class IptcTag(ListenerInterface):
     def _set_values(self, values):
         if not isinstance(values, (list, tuple)):
             raise TypeError('Expecting a list of values')
+
         self.raw_value = [self._convert_to_string(v) for v in values]
 
         if isinstance(self._values, NotifyingList):
@@ -209,20 +210,6 @@ class IptcTag(ListenerInterface):
 
     value = property(fget=_get_values, fset=_set_values,
                      doc='The values of the tag as a list of python objects.')
-
-    def _get_values_deprecated(self):
-        msg = "The 'values' property is deprecated, " \
-              "use the 'value' property instead."
-        warnings.warn(msg, category=DeprecationWarning, stacklevel=2)
-        return self._get_values()
-
-    def _set_values_deprecated(self, values):
-        msg = "The 'values' property is deprecated, " \
-              "use the 'value' property instead."
-        warnings.warn(msg, category=DeprecationWarning, stacklevel=2)
-        return self._set_values(values)
-
-    values = property(fget=_get_values_deprecated, fset=_set_values_deprecated)
 
     def contents_changed(self):
         # Implementation of the ListenerInterface.
@@ -316,6 +303,7 @@ class IptcTag(ListenerInterface):
                     return value.encode('utf-8')
                 except UnicodeEncodeError:
                     raise IptcValueError(value, self.type)
+
             elif isinstance(value, bytes):
                 print('iptc.py _convert_to_string bytes value: %s type: %s' % 
                         (value, type(value)))

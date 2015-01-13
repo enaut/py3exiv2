@@ -165,6 +165,7 @@ class XmpTag(object):
         return self._raw_value
 
     def _set_raw_value(self, value):
+        print('XmpTag._set_raw_value value: %s' % value)
         type = self._tag._getExiv2Type()
         if type == 'XmpText':
             self._tag._setTextValue(value)

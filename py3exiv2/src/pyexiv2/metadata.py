@@ -177,6 +177,7 @@ class ImageMetadata(MutableMapping):
     def _get_iptc_tag(self, key):
         # Return the IPTC tag for the given key.
         # Throw a KeyError if the tag doesn't exist.
+        print('IptcTag._get_iptc_tag key: %s' % key)
         try:
             return self._tags['iptc'][key]
         except KeyError:
