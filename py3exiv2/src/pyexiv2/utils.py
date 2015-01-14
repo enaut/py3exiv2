@@ -139,9 +139,6 @@ def undefined_to_string(undefined):
     :return: the corresponding decoded string
     :rtype: string
     """
-    #if undefined == '':
-        #return ''
-    #return ''.join(map(lambda x: chr(int(x)), undefined.rstrip().split(' ')))
     return ''.join([chr(int(x)) for x in undefined.rstrip().split(' ')])
 
 

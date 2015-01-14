@@ -77,8 +77,7 @@ class XmpTag(object):
     - Integer: int
     - Locale: *[not implemented yet]*
     - MIMEType: 2-tuple of strings
-    - Rational: :class:`fractions.Fraction` if available (Python ≥ 2.6) or
-      :class:`pyexiv2.utils.Rational`
+    - Rational: :class:`fractions.Fraction`
     - Real: *[not implemented yet]*
     - AgentName, ProperName, Text: unicode string
     - Thumbnail: *[not implemented yet]*
@@ -165,7 +164,6 @@ class XmpTag(object):
         return self._raw_value
 
     def _set_raw_value(self, value):
-        print('XmpTag._set_raw_value value: %s' % value)
         type = self._tag._getExiv2Type()
         if type == 'XmpText':
             self._tag._setTextValue(value)
@@ -239,7 +237,6 @@ class XmpTag(object):
                 except TypeError:
                     raise XmpValueError(value, type)
             self.raw_value = raw_value
-
         self._value = value
         self._value_cookie = False
 
