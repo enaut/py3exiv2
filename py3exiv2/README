@@ -36,7 +36,7 @@ Building and installing
 =======================
 
 To build and install the library, while in the top-level directory
-(e.g. '~/dev/pyexiv2', which should contain a file named 'SConstruct'),
+(e.g. '~/dev/p3yexiv2', which should contain a file named 'configure.py'),
 run the following commands:
 
  $ python3 configure.py     # To chek your environment and write the Makefile
