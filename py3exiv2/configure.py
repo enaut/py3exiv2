@@ -32,20 +32,22 @@ def get_libboost_name():
 
     """
     # libboost libs are provided without .pc files, so we can't use pkg-config
-    rep = subprocess.Popen(['find', '/usr/lib/', '-name', 
-                            'libboost_python*'], 
-                            stdout=subprocess.PIPE).communicate()[0]
-    if not rep:
-        return
+    places = ('/usr/lib/', '/usr/local/lib/', '/usr/')
+    for place in places:
+        cmd = ['find', place, '-name', 'libboost_python*']
+        rep = subprocess.Popen(cmd, stdout=subprocess.PIPE).communicate()[0]
+        if not rep:
+            continue
 
-    # rep is type bytes
-    libs = rep.decode(sys.getfilesystemencoding()).split('\n')
-    for l in libs:
-        _, l = os.path.split(l)
-        if l.endswith('.so'):
-            l = l[:-3]
-            if '-py3' in l:
-                return l.replace('libboost', 'lboost')
+        # rep is type bytes
+        libs = rep.decode(sys.getfilesystemencoding()).split('\n')
+        for l in libs:
+            _, l = os.path.split(l)
+            if '.so' in l:
+                l = l.split('.so')[0]
+                # Assume there's no longer python2.3 in the wild
+                if '3' in l[2:]:
+                    return l.replace('libboost', 'lboost')
 
 def write_build_file(dct):
     dct['wrp'] = 'exiv2wrapper'
@@ -67,8 +69,8 @@ if [ "$1" = "-i" ]; then
 
 else
     test -d build || mkdir -p build
-    g++ -o build/%(wrp)s.os %(flags)s -I/usr/include/python3.4m src/%(wrp)s.cpp
-    g++ -o build/%(wrpy)s.os %(flags)s -I/usr/include/python3.4m src/%(wrpy)s.cpp
+    g++ -o build/%(wrp)s.os %(flags)s -I%(py)s src/%(wrp)s.cpp
+    g++ -o build/%(wrpy)s.os %(flags)s -I%(py)s src/%(wrpy)s.cpp
     g++ -o build/libexiv2python.so -shared build/%(wrp)s.os build/%(wrpy)s.os -%(boost)s -lexiv2
     echo "build/libexiv2python.so compiled, use ./build.sh -i to install"
 
