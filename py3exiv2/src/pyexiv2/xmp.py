@@ -355,10 +355,12 @@ class XmpTag(object):
             raise NotImplementedError('XMP conversion for type [%s]' % type)
 
         elif type in ('AgentName', 'ProperName', 'Text'):
-            try:
-                return str(value, 'utf-8')
-            except TypeError:
-                raise XmpValueError(value, type)
+            if isinstance(value, bytes):
+                try:
+                    value = str(value, 'utf-8')
+                except TypeError:
+                    raise XmpValueError(value, type)
+            return value
 
         elif type == 'Thumbnail':
             # TODO

@@ -139,6 +139,9 @@ def undefined_to_string(undefined):
     :return: the corresponding decoded string
     :rtype: string
     """
+    if not undefined:
+        return ''
+
     return ''.join([chr(int(x)) for x in undefined.rstrip().split(' ')])
 
 
@@ -155,7 +158,7 @@ def string_to_undefined(sequence):
     :return: the corresponding undefined string
     :rtype: string
     """
-    return " ".join([str(ord(s)) for s in seq])
+    return " ".join([str(ord(s)) for s in sequence])
 
 def is_fraction(obj):
     """
@@ -322,7 +325,9 @@ class NotifyingList(list):
         self._notify_listeners()
 
     def sort(self, cmp=None, key=None, reverse=False):
-        super(NotifyingList, self).sort(cmp, key, reverse)
+        super(NotifyingList, self).sort(cmp, key)
+        if reverse:
+            self.reverse()
         self._notify_listeners()
 
     def __iadd__(self, other):

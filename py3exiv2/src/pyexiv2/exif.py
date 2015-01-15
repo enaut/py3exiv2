@@ -431,13 +431,11 @@ class ExifTag(ListenerInterface):
         elif self.type == 'Undefined':
             if isinstance(value, str):
                 try:
-                    return string_to_undefined(value.encode('utf-8'))
+                    return string_to_undefined(value)
                 except UnicodeEncodeError:
                     raise ExifValueError(value, self.type)
 
             elif isinstance(value, bytes):
-                # FIXME 
-                print('exif.py _convert_to_string 2 bytes value: %s' % value)
                 return string_to_undefined(value)
 
             else:
