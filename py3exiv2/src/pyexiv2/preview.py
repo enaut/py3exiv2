@@ -30,6 +30,9 @@
 Provide the Preview class.
 """
 
+
+import sys
+
 class Preview(object):
 
     """
@@ -64,7 +67,10 @@ class Preview(object):
     @property
     def data(self):
         """The preview image data buffer."""
-        return self.__preview.data
+        print('Thumbnail data not implemented')
+        return
+        buf = self.__preview.data.tobytes()
+        return buf
 
     def write_to_file(self, path):
         """

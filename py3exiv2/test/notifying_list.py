@@ -73,10 +73,6 @@ class TestNotifyingList(unittest.TestCase):
         self.failUnlessRaises(NotImplementedError, self.values.sort)
         self.failUnlessRaises(NotImplementedError, self.values.__iadd__, [8, 4])
         self.failUnlessRaises(NotImplementedError, self.values.__imul__, 3)
-        self.failUnlessRaises(NotImplementedError, self.values.__setslice__,
-                              3, 4, [8, 4])
-        self.failUnlessRaises(NotImplementedError, self.values.__delslice__,
-                              3, 5)
 
     def _register_listeners(self):
         # Register a random number of listeners
@@ -192,20 +188,15 @@ class TestNotifyingList(unittest.TestCase):
         for listener in listeners:
             self.failUnlessEqual(listener.changes, 1)
 
-        self.values.sort(cmp=lambda x, y: y - x)
-        self.failUnlessEqual(self.values, [57, 14, 9, 7, 5, 3, 2])
-        for listener in listeners:
-            self.failUnlessEqual(listener.changes, 2)
-
         self.values.sort(key=lambda x: x * x)
         self.failUnlessEqual(self.values, [2, 3, 5, 7, 9, 14, 57])
         for listener in listeners:
-            self.failUnlessEqual(listener.changes, 3)
+            self.failUnlessEqual(listener.changes, 2)
 
         self.values.sort(reverse=True)
         self.failUnlessEqual(self.values, [57, 14, 9, 7, 5, 3, 2])
         for listener in listeners:
-            self.failUnlessEqual(listener.changes, 4)
+            self.failUnlessEqual(listener.changes, 3)
 
     def test_iadd(self):
         listeners = self._register_listeners()
@@ -301,38 +292,38 @@ class TestNotifyingList(unittest.TestCase):
         del self.values[2:2]
         self.failUnlessEqual(self.values, [5, 7, 14, 57, 3, 2])
         for listener in listeners:
-            self.failUnlessEqual(listener.changes, 1)
+            self.failUnlessEqual(listener.changes, 2)
 
         # With negatives indexes
 
         del self.values[4:-1]
         self.failUnlessEqual(self.values, [5, 7, 14, 57, 2])
         for listener in listeners:
-            self.failUnlessEqual(listener.changes, 2)
+            self.failUnlessEqual(listener.changes, 3)
 
         del self.values[-1:5]
         self.failUnlessEqual(self.values, [5, 7, 14, 57])
         for listener in listeners:
-            self.failUnlessEqual(listener.changes, 3)
+            self.failUnlessEqual(listener.changes, 4)
 
         del self.values[-2:-1]
         self.failUnlessEqual(self.values, [5, 7, 57])
         for listener in listeners:
-            self.failUnlessEqual(listener.changes, 4)
+            self.failUnlessEqual(listener.changes, 5)
 
         # With missing (implicit) indexes
 
         del self.values[:1]
         self.failUnlessEqual(self.values, [7, 57])
         for listener in listeners:
-            self.failUnlessEqual(listener.changes, 5)
+            self.failUnlessEqual(listener.changes, 6)
 
         del self.values[1:]
         self.failUnlessEqual(self.values, [7])
         for listener in listeners:
-            self.failUnlessEqual(listener.changes, 6)
+            self.failUnlessEqual(listener.changes, 7)
 
         del self.values[:]
         self.failUnlessEqual(self.values, [])
         for listener in listeners:
-            self.failUnlessEqual(listener.changes, 7)
+            self.failUnlessEqual(listener.changes, 8)

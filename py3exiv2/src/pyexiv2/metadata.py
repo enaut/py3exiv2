@@ -87,7 +87,7 @@ class ImageMetadata(MutableMapping):
         Instantiate an image container from an image buffer.
 
         :param buffer: a buffer containing image data
-        :type buffer: string
+        :type buffer: bytes
         """
         obj = cls(None)
         obj.__image = libexiv2python._Image(buffer, len(buffer))

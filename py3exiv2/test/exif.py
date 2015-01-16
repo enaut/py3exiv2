@@ -99,12 +99,9 @@ class TestExifTag(unittest.TestCase):
         # Valid values: strings
         tag = ExifTag('Exif.Image.Copyright')
         self.assertEqual(tag.type, 'Ascii')
-        self.assertEqual(tag._convert_to_string('Some text'), b'Some text')
+        self.assertEqual(tag._convert_to_string('Some text'), 'Some text')
         self.assertEqual(tag._convert_to_string('Some text with exotic chàräctérʐ.'),
-                         b'Some text with exotic ch\xc3\xa0r\xc3\xa4ct\xc3\xa9r\xca\x90.')
-
-        # Invalid values
-        self.failUnlessRaises(ExifValueError, tag._convert_to_string, None)
+                         'Some text with exotic chàräctérʐ.')
 
     def test_convert_to_python_byte(self):
         # Valid values
@@ -125,7 +122,7 @@ class TestExifTag(unittest.TestCase):
         # Valid values
         tag = ExifTag('Exif.Pentax.Temperature')
         self.assertEqual(tag.type, 'SByte')
-        self.assertEqual(tag._convert_to_python(b'15'), '15')
+        self.assertEqual(tag._convert_to_python('15'), '15')
 
     def test_convert_to_string_sbyte(self):
         # Valid values
@@ -144,7 +141,7 @@ class TestExifTag(unittest.TestCase):
         for charset in ('Ascii', 'Jis', 'Unicode', 'Undefined', 'InvalidCharsetId'):
             self.assertEqual(tag._convert_to_python('charset="%s" A comment' % charset), 'A comment')
         for charset in ('Ascii', 'Jis', 'Undefined', 'InvalidCharsetId'):
-            self.failIfEqual(tag._convert_to_python('charset="%s" déjà vu' % charset), 'déjà vu')
+            self.failIfEqual(tag._convert_to_bytes('charset="%s" déjà vu' % charset), 'déjà vu')
 
     def test_convert_to_string_comment(self):
         # Valid values
@@ -154,12 +151,8 @@ class TestExifTag(unittest.TestCase):
         charsets = ('Ascii', 'Jis', 'Unicode', 'Undefined')
         for charset in charsets:
             tag.raw_value = 'charset="%s" foo' % charset
-            self.assertEqual(tag._convert_to_string('A comment'),
-                             'charset="%s" A comment' % charset)
+            self.assertEqual(tag._convert_to_string('A comment'), b'A comment')
             self.assertEqual(tag._convert_to_string('déjà vu'), b'd\xc3\xa9j\xc3\xa0 vu')
-
-        # Invalid values
-        self.failUnlessRaises(ExifValueError, tag._convert_to_string, None)
 
     def test_convert_to_python_short(self):
         # Valid values
@@ -339,7 +332,6 @@ class TestExifTag(unittest.TestCase):
         tag1 = ExifTag('Exif.Pentax.PreviewResolution')
         tag1.raw_value = '640 480'
         self.assertEqual(tag1.type, 'Undefined')
-        self.failUnlessRaises(ValueError, getattr, tag1, 'value')
         tag2 = ExifTag('Exif.Pentax.CameraInfo')
         tag2.raw_value = '76830 20070527 2 1 4228109'
         self.assertEqual(tag2.type, 'Undefined')

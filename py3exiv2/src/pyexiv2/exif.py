@@ -463,7 +463,7 @@ class ExifTag(ListenerInterface):
                 pass
 
             else:
-                self._set_raw_value('charset=%s %s' % (charset, val))
+                #self._set_raw_value('charset=%s %s' % (charset, val))
                 return val
 
         elif isinstance(value, bytes):
@@ -563,7 +563,10 @@ class ExifThumbnail(object):
         self._update_exif_tags_cache()
 
     def _get_data(self):
-        return self._metadata._image._getExifThumbnailData()
+        sys.stdout.write('Thumbnail data not implemented')
+        return
+        buf_ = self._metadata._image._getExifThumbnailData()
+        return buf_.tobytes()
 
     def _set_data(self, data):
         self._metadata._image._setExifThumbnailFromData(data)

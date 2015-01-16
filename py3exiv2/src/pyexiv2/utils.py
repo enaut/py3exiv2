@@ -324,10 +324,10 @@ class NotifyingList(list):
         super(NotifyingList, self).reverse()
         self._notify_listeners()
 
-    def sort(self, cmp=None, key=None, reverse=False):
-        super(NotifyingList, self).sort(cmp, key)
-        if reverse:
-            self.reverse()
+    def sort(self, key=None, reverse=False):
+        print('utils NotifyingList.sort key: %s reverse: %s'
+                %(key, reverse))
+        super(NotifyingList, self).sort(key=key, reverse=reverse)
         self._notify_listeners()
 
     def __iadd__(self, other):
@@ -340,12 +340,12 @@ class NotifyingList(list):
         self._notify_listeners()
         return self
 
-    def __setslice__(self, i, j, items):
+    def setslice__(self, i, j, items):
         # __setslice__ is deprecated but needs to be overridden for completeness
         super(NotifyingList, self).__setslice__(i, j, items)
         self._notify_listeners()
 
-    def __delslice__(self, i, j):
+    def delslice__(self, i, j):
         # __delslice__ is deprecated but needs to be overridden for completeness
         deleted = self[i:j]
         super(NotifyingList, self).__delslice__(i, j)

@@ -218,25 +218,32 @@ class XmpTag(object):
             if stype.lower().startswith('closed choice of'):
                 stype = stype[17:]
             self.raw_value = self._convert_to_string(value, stype)
+
         elif type in ('XmpAlt', 'XmpBag', 'XmpSeq'):
             if not isinstance(value, (list, tuple)):
                 raise TypeError('Expecting a list of values')
+
             stype = self.type[4:]
             if stype.lower().startswith('closed choice of'):
                 stype = stype[17:]
             self.raw_value = [self._convert_to_string(v, stype) for v in value]
+
         elif type == 'LangAlt':
             if isinstance(value, str):
                 value = {'x-default': value}
+
             if not isinstance(value, dict):
                 raise TypeError('Expecting a dictionary mapping language codes to values')
+
             raw_value = {}
             for k, v in value.items():
                 try:
                     raw_value[k.encode('utf-8')] = v.encode('utf-8')
                 except TypeError:
                     raise XmpValueError(value, type)
+
             self.raw_value = raw_value
+
         self._value = value
         self._value_cookie = False
 
@@ -425,10 +432,11 @@ class XmpTag(object):
                     return value.encode('utf-8')
                 except UnicodeEncodeError:
                     raise XmpValueError(value, type)
-            try:
-                return str(value)                
-            except:
-                raise XmpValueError(value, type)
+
+            elif isinstance(value, bytes): 
+                return value 
+
+            raise XmpValueError(value, type)
 
         elif type == 'Rational':
             if is_fraction(value):
@@ -443,10 +451,6 @@ class XmpTag(object):
                     return value.encode('utf-8')
                 except UnicodeEncodeError:
                     raise XmpValueError(value, type)
-            try:
-                return str(value)                
-            except:
-                raise XmpValueError(value, type)
 
         raise NotImplementedError('XMP conversion for type [%s]' % type)
 
