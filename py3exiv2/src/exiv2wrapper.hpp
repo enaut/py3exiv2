@@ -238,7 +238,7 @@ public:
     const std::string getExifThumbnailMimeType();
     const std::string getExifThumbnailExtension();
     void writeExifThumbnailToFile(const std::string& path);
-    const std::string getExifThumbnailData();
+    const std::vector<char> getExifThumbnailData();
     void eraseExifThumbnail();
     void setExifThumbnailFromFile(const std::string& path);
     void setExifThumbnailFromData(const std::string& data);
