@@ -3,6 +3,7 @@
 # ******************************************************************************
 #
 # Copyright (C) 2009-2011 Olivier Tilloy <olivier@tilloy.net>
+# Copyright (C) 2015 Vincent Vande Vyvre <vincent.vandevyvre@oqapy.eu>
 #
 # This file is part of the pyexiv2 distribution.
 #
@@ -21,6 +22,7 @@
 # Foundation, Inc., 51 Franklin Street, 5th Floor, Boston, MA 02110-1301 USA.
 #
 # Author: Olivier Tilloy <olivier@tilloy.net>
+# Hacking to Python3: Vincent Vande Vyvre <vincent.vandevyvre@oqapy.eu>
 #
 # ******************************************************************************
 
@@ -40,9 +42,9 @@ class TestXmpTag(unittest.TestCase):
     def test_convert_to_python_bag(self):
         # Valid values
         tag = XmpTag('Xmp.dc.Subject')
-        self.assertEqual(tag._convert_to_python('', 'Text'), u'')
+        self.assertEqual(tag._convert_to_python('', 'Text'), '')
         self.assertEqual(tag._convert_to_python('One value only', 'Text'),
-                         u'One value only')
+                         'One value only')
 
     def test_convert_to_string_bag(self):
         # Valid values
@@ -396,13 +398,13 @@ class TestXmpNamespaces(unittest.TestCase):
         register_namespace('foobar/', 'far')
         key = 'Xmp.far.foo'
         value = datetime.date.today()
-        self.assertRaises(XmpValueError, self.metadata.__setitem__, key, value)
+        self.assertRaises(NotImplementedError, self.metadata.__setitem__, key, value)
         value = datetime.datetime.now()
-        self.assertRaises(XmpValueError, self.metadata.__setitem__, key, value)
+        self.assertRaises(NotImplementedError, self.metadata.__setitem__, key, value)
         value = ['foo', 'bar']
-        self.assertRaises(XmpValueError, self.metadata.__setitem__, key, value)
+        self.assertRaises(NotImplementedError, self.metadata.__setitem__, key, value)
         value = {'x-default': 'foo', 'fr-FR': 'bar'}
-        self.assertRaises(XmpValueError, self.metadata.__setitem__, key, value)
+        self.assertRaises(NotImplementedError, self.metadata.__setitem__, key, value)
         value = 'simple text value'
         self.metadata[key] = value
 
