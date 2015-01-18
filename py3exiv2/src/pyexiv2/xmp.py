@@ -167,10 +167,12 @@ class XmpTag(object):
         type = self._tag._getExiv2Type()
         if type == 'XmpText':
             self._tag._setTextValue(value)
+
         elif type in ('XmpAlt', 'XmpBag', 'XmpSeq'):
             if not value:
                 raise ValueError('Empty array')
             self._tag._setArrayValue(value)
+
         elif type == 'LangAlt':
             if not value:
                 raise ValueError('Empty LangAlt')
@@ -237,10 +239,12 @@ class XmpTag(object):
 
             raw_value = {}
             for k, v in value.items():
-                try:
-                    raw_value[k.encode('utf-8')] = v.encode('utf-8')
-                except TypeError:
-                    raise XmpValueError(value, type)
+                if isinstance(v, str):
+                    try:
+                        v = v.encode('utf-8')
+                    except TypeError:
+                        raise XmpValueError(value, type)
+                raw_value[k] = v
 
             self.raw_value = raw_value
 
@@ -374,6 +378,12 @@ class XmpTag(object):
             raise NotImplementedError('XMP conversion for type [%s]' % type)
 
         elif type in ('URI', 'URL'):
+            if isinstance(value, bytes):
+                try:
+                    value = value.decode('utf-8')
+                except UnicodeDecodeError:
+                    # Unknow encoding, return the raw value
+                    pass
             return value
 
         elif type == 'XPath':

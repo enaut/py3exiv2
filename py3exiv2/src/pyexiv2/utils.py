@@ -325,8 +325,6 @@ class NotifyingList(list):
         self._notify_listeners()
 
     def sort(self, key=None, reverse=False):
-        print('utils NotifyingList.sort key: %s reverse: %s'
-                %(key, reverse))
         super(NotifyingList, self).sort(key=key, reverse=reverse)
         self._notify_listeners()
 

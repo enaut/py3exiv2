@@ -60,7 +60,7 @@ class TestUserCommentReadWrite(unittest.TestCase):
         tag = m['Exif.Photo.UserComment']
         self.assertEqual(tag.type, 'Comment')
         tag.value = 'foo bar'
-        self.assertEqual(tag.raw_value, 'charset="Ascii" foo bar')
+        self.assertEqual(tag.raw_value, b'foo bar')
         self.assertEqual(tag.value, 'foo bar')
 
     def test_write_unicode_over_ascii(self):
@@ -68,7 +68,7 @@ class TestUserCommentReadWrite(unittest.TestCase):
         tag = m['Exif.Photo.UserComment']
         self.assertEqual(tag.type, 'Comment')
         tag.value = 'déjà vu'
-        self.assertEqual(tag.raw_value, 'déjà vu')
+        self.assertEqual(tag.raw_value, b'd\xc3\xa9j\xc3\xa0 vu')
         self.assertEqual(tag.value, 'déjà vu')
 
 class TestUserCommentAdd(unittest.TestCase):

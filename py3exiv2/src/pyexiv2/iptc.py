@@ -239,6 +239,12 @@ class IptcTag(ListenerInterface):
             # There is currently no charset conversion.
             # TODO: guess the encoding and decode accordingly into unicode
             # where relevant.
+            if isinstance(value, bytes):
+                try:
+                    value = value.decode('utf-8')
+                except UnicodeDecodeError:
+                    # Unknow encoding, return the raw value
+                    pass
             return value
 
         elif self.type == 'Date':
@@ -305,8 +311,6 @@ class IptcTag(ListenerInterface):
                     raise IptcValueError(value, self.type)
 
             elif isinstance(value, bytes):
-                print('iptc.py _convert_to_string bytes value: %s type: %s' % 
-                        (value, type(value)))
                 return value
             else:
                 raise IptcValueError(value, self.type)

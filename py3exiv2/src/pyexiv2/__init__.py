@@ -46,13 +46,13 @@ A typical use of this binding would be:
 >>> import pyexiv2
 >>> metadata = pyexiv2.ImageMetadata('test/smiley.jpg')
 >>> metadata.read()
->>> print metadata.exif_keys
+>>> print(metadata.exif_keys)
 ['Exif.Image.ImageDescription', 'Exif.Image.XResolution',
  'Exif.Image.YResolution', 'Exif.Image.ResolutionUnit', 'Exif.Image.Software',
  'Exif.Image.DateTime', 'Exif.Image.Artist', 'Exif.Image.Copyright',
  'Exif.Image.ExifTag', 'Exif.Photo.Flash', 'Exif.Photo.PixelXDimension',
  'Exif.Photo.PixelYDimension']
->>> print metadata['Exif.Image.DateTime'].value
+>>> print(metadata['Exif.Image.DateTime'].value)
 2004-07-13 21:23:44
 >>> import datetime
 >>> metadata['Exif.Image.DateTime'].value = datetime.datetime.today()

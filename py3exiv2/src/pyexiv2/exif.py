@@ -287,28 +287,28 @@ class ExifTag(ListenerInterface):
             return value
 
         elif self.type in ('Byte', 'SByte'):
+            if isinstance(value, bytes):
+                return value.decode('utf-8')
             return value
 
         elif self.type == 'Comment':
-            if value.startswith('charset='):
-                charset, val = value.split(' ', 1)
-                if isinstance(val, str):
+            if isinstance(value, str):
+                if value.startswith('charset='):
+                    charset, val = value.split(' ', 1)
                     return val
+                return value
 
+            if value.startswith(b'charset='):          
                 charset = charset.split('=')[1].strip('"')
                 encoding = self._match_encoding(charset)
                 return val.decode(encoding, 'replace')
 
             else:
                 # No encoding defined.
-                if isinstance(value, str):
-                    return value
-
-                elif isinstance(value, bytes):
-                    try:
-                        return value.decode('utf-8')
-                    except UnicodeError:
-                        pass
+                try:
+                    return value.decode('utf-8')
+                except UnicodeError:
+                    pass
 
             return value
 

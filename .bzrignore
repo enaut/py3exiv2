@@ -8,3 +8,6 @@ py3exiv2/build
 py3exiv2/build.sh
 py3exiv2/src/main.py
 py3exiv2/src/DSCF0006.JPG
+py3exiv2/test/script.py
+samples
+samples/*

@@ -4,6 +4,7 @@
 # ******************************************************************************
 #
 # Copyright (C) 2008-2011 Olivier Tilloy <olivier@tilloy.net>
+# Copyright (C) 2015 Vincent Vande Vyvre <vincent.vandevyvre@oqapy.eu>
 #
 # This file is part of the pyexiv2 distribution.
 #
@@ -22,6 +23,7 @@
 # Foundation, Inc., 51 Franklin Street, 5th Floor, Boston, MA 02110-1301 USA.
 #
 # Author: Olivier Tilloy <olivier@tilloy.net>
+# Hacking to Python3: Vincent Vande Vyvre <vincent.vandevyvre@oqapy.eu>
 #
 # ******************************************************************************
 
@@ -39,29 +41,29 @@ from buffer import TestBuffer
 from encoding import TestEncodings
 from utils import TestConversions, TestFractions
 from usercomment import TestUserCommentReadWrite, TestUserCommentAdd
-#from pickling import TestPicklingTags
+from pickling import TestPicklingTags
 from datetimeformatter import TestDateTimeFormatter
 
 
 def run_unit_tests():
     # Instantiate a test suite containing all the test cases
     suite = unittest.TestSuite()
-    #suite.addTest(unittest.defaultTestLoader.loadTestsFromTestCase(ReadMetadataTestCase))
-    #suite.addTest(unittest.defaultTestLoader.loadTestsFromTestCase(TestGPSCoordinate))
-    #suite.addTest(unittest.defaultTestLoader.loadTestsFromTestCase(TestNotifyingList))
-    #suite.addTest(unittest.defaultTestLoader.loadTestsFromTestCase(TestExifTag))
-    #suite.addTest(unittest.defaultTestLoader.loadTestsFromTestCase(TestIptcTag))
-    #suite.addTest(unittest.defaultTestLoader.loadTestsFromTestCase(TestXmpTag))
+    suite.addTest(unittest.defaultTestLoader.loadTestsFromTestCase(ReadMetadataTestCase))
+    suite.addTest(unittest.defaultTestLoader.loadTestsFromTestCase(TestGPSCoordinate))
+    suite.addTest(unittest.defaultTestLoader.loadTestsFromTestCase(TestNotifyingList))
+    suite.addTest(unittest.defaultTestLoader.loadTestsFromTestCase(TestExifTag))
+    suite.addTest(unittest.defaultTestLoader.loadTestsFromTestCase(TestIptcTag))
+    suite.addTest(unittest.defaultTestLoader.loadTestsFromTestCase(TestXmpTag))
     suite.addTest(unittest.defaultTestLoader.loadTestsFromTestCase(TestXmpNamespaces))
-    #suite.addTest(unittest.defaultTestLoader.loadTestsFromTestCase(TestImageMetadata))
+    suite.addTest(unittest.defaultTestLoader.loadTestsFromTestCase(TestImageMetadata))
     #suite.addTest(unittest.defaultTestLoader.loadTestsFromTestCase(TestBuffer))
-    #suite.addTest(unittest.defaultTestLoader.loadTestsFromTestCase(TestEncodings))
-    #suite.addTest(unittest.defaultTestLoader.loadTestsFromTestCase(TestConversions))
-    #suite.addTest(unittest.defaultTestLoader.loadTestsFromTestCase(TestFractions))
-    #suite.addTest(unittest.defaultTestLoader.loadTestsFromTestCase(TestUserCommentReadWrite))
-    #suite.addTest(unittest.defaultTestLoader.loadTestsFromTestCase(TestUserCommentAdd))
-    #suite.addTest(unittest.defaultTestLoader.loadTestsFromTestCase(TestPicklingTags))
-    #suite.addTest(unittest.defaultTestLoader.loadTestsFromTestCase(TestDateTimeFormatter))
+    suite.addTest(unittest.defaultTestLoader.loadTestsFromTestCase(TestEncodings))
+    suite.addTest(unittest.defaultTestLoader.loadTestsFromTestCase(TestConversions))
+    suite.addTest(unittest.defaultTestLoader.loadTestsFromTestCase(TestFractions))
+    suite.addTest(unittest.defaultTestLoader.loadTestsFromTestCase(TestUserCommentReadWrite))
+    suite.addTest(unittest.defaultTestLoader.loadTestsFromTestCase(TestUserCommentAdd))
+    suite.addTest(unittest.defaultTestLoader.loadTestsFromTestCase(TestPicklingTags))
+    suite.addTest(unittest.defaultTestLoader.loadTestsFromTestCase(TestDateTimeFormatter))
     # Run the test suite
     return unittest.TextTestRunner(verbosity=2).run(suite)
 
