@@ -32,10 +32,15 @@ Provide the ImageMetadata class.
 
 import os
 import sys
-from errno import ENOENT
-from collections.abc import MutableMapping
-from itertools import chain
 import codecs
+
+from errno import ENOENT
+from itertools import chain
+
+if sys.version_info < (3, 3):
+    from collections import MutableMapping
+else:
+    from collections.abc import MutableMapping
 
 import libexiv2python
 

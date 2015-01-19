@@ -49,6 +49,18 @@ def get_libboost_name():
                 if '3' in l[2:]:
                     return l.replace('libboost', 'lboost')
 
+def make_build_dir():
+    if not os.path.isdir('build'):
+        os.mkdir('build')
+
+    else:
+        for f in ('build/exiv2wrapper.so', 'exiv2wrapper_python',
+                  'build/libexiv2python.so'):
+            try:
+                os.unlink(f)
+            except:
+                pass
+
 def write_build_file(dct):
     dct['wrp'] = 'exiv2wrapper'
     dct['wrpy'] = 'exiv2wrapper_python'
@@ -68,11 +80,9 @@ if [ "$1" = "-i" ]; then
     cp src/pyexiv2/xmp.py %(pyexiv)s/xmp.py
 
 else
-    test -d build || mkdir -p build
     g++ -o build/%(wrp)s.os %(flags)s -I%(py)s src/%(wrp)s.cpp
     g++ -o build/%(wrpy)s.os %(flags)s -I%(py)s src/%(wrpy)s.cpp
     g++ -o build/libexiv2python.so -shared build/%(wrp)s.os build/%(wrpy)s.os -%(boost)s -lexiv2
-    echo "build/libexiv2python.so compiled, use ./build.sh -i to install"
 
 fi""" % dct
 
@@ -104,7 +114,6 @@ if __name__ == '__main__':
     dct['py'] = get_python_inc()
     dct['dist'] = get_python_lib()
     dct['pyexiv'] = dct['dist'] + '/pyexiv2'
+    make_build_dir()
     write_build_file(dct)
-
-
 
