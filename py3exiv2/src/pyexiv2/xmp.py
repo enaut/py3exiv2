@@ -112,6 +112,7 @@ class XmpTag(object):
         self._value = None
         self._value_cookie = False
         if value is not None:
+            type_ = self._tag._getType()
             self._set_value(value)
 
     def _set_owner(self, metadata):
@@ -165,6 +166,7 @@ class XmpTag(object):
 
     def _set_raw_value(self, value):
         type = self._tag._getExiv2Type()
+        
         if type == 'XmpText':
             self._tag._setTextValue(value)
 
@@ -461,6 +463,9 @@ class XmpTag(object):
                     return value.encode('utf-8')
                 except UnicodeEncodeError:
                     raise XmpValueError(value, type)
+
+            elif isinstance(value, datetime.datetime):
+                return DateTimeFormatter.xmp(value)
 
         raise NotImplementedError('XMP conversion for type [%s]' % type)
 

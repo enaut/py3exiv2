@@ -3,6 +3,8 @@
 import sys
 import os
 
+import datetime
+
 import pyexiv2
 
 from pyexiv2.metadata import ImageMetadata
@@ -10,7 +12,7 @@ from pyexiv2.xmp import XmpTag
 from pyexiv2.iptc import IptcValueError
 
 IMAGE = 'DSCF_0273.JPG'
-IMAGE2 = 'Jason-Grover_CAM.jpg'
+IMAGE2 = 'Cyrillic.jpg'
 IMAGE3 = 'exiv2.jpg'
 IMAGE4 = 'gri_2008_r_3_4046.jpg'
 
@@ -91,16 +93,23 @@ if __name__ == '__main__':
     print('\n ==================================  IPTC  ========================\n')
     display_iptc(data)
     print('\n ==================================  XMP  ========================\n')
+
+    key = 'Xmp.oqapy.lastEditDate'
+    data[key] = datetime.datetime.today()
+
+
+    print('Create new xmp ...')
+    # Create a new namespace
+    #pyexiv2.xmp.register_namespace('www.oqapy.eu/', 'oqapy')
+    #key = 'Xmp.oqapy.lastEditDate'
+    #val = 'Last edit today'
+    # We can't assign directly the value, we must create the XmpTag before
+    #data[key] = pyexiv2.XmpTag(key, val)
+
+    data.write()
     display_xmp(data)
     print('=====================================================================')
-    key = 'Xmp.dc.title'
-    value = {'x-default': 'Landscape', 'fr-FR': "Paysage"}
-    data._set_xmp_tag(key, value)
-    key = 'Iptc.Application2.Copyright'
-    try:
-        data[key].value = [1254]
-    except IptcValueError as e:
-        print('Value error "%s" need type: %s, got type: %s' %(e.value, e.type, type(e.value)))
+
     sys.exit()
     with open('exif_record', 'r') as inf:
         for l in inf.readlines():
