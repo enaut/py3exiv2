@@ -7,6 +7,7 @@ import pyexiv2
 
 from pyexiv2.metadata import ImageMetadata
 from pyexiv2.xmp import XmpTag
+from pyexiv2.iptc import IptcValueError
 
 IMAGE = 'DSCF_0273.JPG'
 IMAGE2 = 'Jason-Grover_CAM.jpg'
@@ -15,7 +16,7 @@ IMAGE4 = 'gri_2008_r_3_4046.jpg'
 
 def read_metadata():
     try:
-        metadata = ImageMetadata(IMAGE3)
+        metadata = ImageMetadata(IMAGE)
         metadata.read()
     except Exception as why:
         print("Error in read metadata, reason:\n{0}".format(why))
@@ -95,6 +96,11 @@ if __name__ == '__main__':
     key = 'Xmp.dc.title'
     value = {'x-default': 'Landscape', 'fr-FR': "Paysage"}
     data._set_xmp_tag(key, value)
+    key = 'Iptc.Application2.Copyright'
+    try:
+        data[key].value = [1254]
+    except IptcValueError as e:
+        print('Value error "%s" need type: %s, got type: %s' %(e.value, e.type, type(e.value)))
     sys.exit()
     with open('exif_record', 'r') as inf:
         for l in inf.readlines():
