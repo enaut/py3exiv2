@@ -18,7 +18,7 @@ def show_help():
     help = """
     configure.py\n
     Script to configure the compilation and the installation of py3exiv2.\n
-    This script require Python >= 3.3\n
+    This script require Python >= 3.2\n
     Usage:  python3 configure.py [OPTION]\n
     Options:
     -h               Show this info and exit.
@@ -102,8 +102,9 @@ if __name__ == '__main__':
             if not os.path.isfile(path):
                 print('No such file: %s' % path)
                 sys.exit()
-
-            dct['boost'] = path
+            lib, _ = os.path.splitext(os.path.basename(path))
+            lib = lib.replace('libboost', 'lboost')
+            dct['boost'] = lib
 
     if not dct:
         dct['boost'] = get_libboost_name()
