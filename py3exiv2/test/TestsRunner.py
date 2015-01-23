@@ -37,7 +37,7 @@ from exif import TestExifTag
 from iptc import TestIptcTag
 from xmp import TestXmpTag, TestXmpNamespaces
 from metadata import TestImageMetadata
-from buffer import TestBuffer
+#from buffer import TestBuffer
 from encoding import TestEncodings
 from utils import TestConversions, TestFractions
 from usercomment import TestUserCommentReadWrite, TestUserCommentAdd
@@ -56,6 +56,7 @@ def run_unit_tests():
     suite.addTest(unittest.defaultTestLoader.loadTestsFromTestCase(TestXmpTag))
     suite.addTest(unittest.defaultTestLoader.loadTestsFromTestCase(TestXmpNamespaces))
     suite.addTest(unittest.defaultTestLoader.loadTestsFromTestCase(TestImageMetadata))
+    # Not yet implemented
     #suite.addTest(unittest.defaultTestLoader.loadTestsFromTestCase(TestBuffer))
     suite.addTest(unittest.defaultTestLoader.loadTestsFromTestCase(TestEncodings))
     suite.addTest(unittest.defaultTestLoader.loadTestsFromTestCase(TestConversions))
