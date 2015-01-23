@@ -207,7 +207,7 @@ It provides convenient methods for the manipulation of EXIF, IPTC and XMP metada
 pyexiv2.exif
 ############
 
-This module provide the classes :class:`ExifTag`, :class:`ExifValueError` and :class:`ExifThumbnail`.
+This module provides the classes :class:`ExifTag`, :class:`ExifValueError` and :class:`ExifThumbnail`.
 
 .. class:: pyexiv2.exif.ExifTag
 
@@ -388,7 +388,7 @@ class pyexiv2.exif.ExifThumbnail(_metadata)
 pyexiv2.iptc
 ############
 
-This module provide the classes :class:`IptcTag` and :class:`IptcValueError`.
+This module provides the classes :class:`IptcTag` and :class:`IptcValueError`.
 
 .. class:: pyexiv2.iptc.IptcTag
 
@@ -512,7 +512,7 @@ The :class:`IptcTag` define an IPTC tag.
 pyexiv2.xmp
 ###########
 
-This module provide the classes :class:`XmpTag` and :class:`XmpValueError` and the following three functions to handle the XMP name spaces.
+This module provides the classes :class:`XmpTag` and :class:`XmpValueError` and the following three functions to handle the XMP name spaces.
 
 .. function:: pyexiv2.xmp.register_namespace(name, prefix)
 

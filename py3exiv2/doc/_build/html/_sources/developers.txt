@@ -1,56 +1,35 @@
 Developers
 ==========
 
-If you are a developer and use pyexiv2 in your project, you will find here
+If you are a developer and use py3exiv2 in your project, you will find here
 useful information.
 
 Getting the code
 ################
 
-pyexiv2's source code is versioned with
-`bazaar <http://bazaar.canonical.com/>`_, and all the branches, including the
-main development focus (sometimes referred to as *trunk*), are hosted on
-`Launchpad <https://code.launchpad.net/pyexiv2>`_.
+py3exiv2's source code is versioned with
+`bazaar <http://bazaar.canonical.com/>`_, and the main development focus (sometimes referred to as *trunk*), is hosted on `Launchpad <https://code.launchpad.net/py3exiv2>`_.
 
 To get a working copy of the latest revision of the development branch, just
 issue the following command in a terminal::
 
-  bzr branch lp:pyexiv2
-
-If you need to get a specific revision identified by a tag (all releases of
-pyexiv2 are tagged), use the following command::
-
-  bzr branch -r tag:tag_name lp:pyexiv2
-
-A list of all the available tags can be obtained using the ``bzr tags``
-command::
-
-  osomon@granuja:~/dev/pyexiv2$ bzr tags
-  release-0.1          60
-  release-0.1.1        73
-  release-0.1.2        99
-  release-0.1.3        99.1.6
-  release-0.2.0        296
-  release-0.2.1        306
-  release-0.2.2        318
-  release-0.3.0        349
+  bzr branch lp:py3exiv2
 
 Dependencies
 ############
 
-You will need the following dependencies installed on your system to build and
-use pyexiv2:
+To use py3exiv2:
 
-* `Python <http://python.org/download/>`_ ≥ 2.6
-* `boost.python <http://www.boost.org/libs/python/doc/>`_ ≥ 1.35
-* `libexiv2 <http://exiv2.org/>`_ ≥ 0.19
-* `SCons <http://scons.org/>`_
+* `Python <http://python.org/download/>`_ ≥ 3.2
+* `boost.python <http://www.boost.org/libs/python/doc/>`_ ≥ 1.46
+* `libexiv2 <http://exiv2.org/>`_ ≥ 0.20
 
-For Python, boost.python and libexiv2, the development files are needed
-(-dev packages).
-A typical list of packages to install on a Debian/Ubuntu system is::
+To build py3exiv2:
 
-  python-all-dev libboost-python-dev libexiv2-dev scons
+* `python-all-dev` (≥ 3.2)
+* `libexiv2-dev` (≥ 0.20)        # `exiv2-devel` on fedora
+* `libboost-python-dev` (≥ 1.35) # `boost-devel` on fedora
+* `g++`
 
 Some unit tests have a dependency on
 `python-tz <http://pytz.sourceforge.net/>`_.
@@ -74,33 +53,29 @@ Building and installing
 Linux
 +++++
 
-Building pyexiv2 is as simple as invoking ``scons`` in the top-level directory::
+Open a terminal into the top-level directory (where is the file *configure.py*)::
 
-  osomon@granuja:~/dev/pyexiv2$ scons
-  scons: Reading SConscript files ...
-  scons: done reading SConscript files.
-  scons: Building targets ...
-  g++ -o build/exiv2wrapper.os -c -fPIC -I/usr/include/python2.7 src/exiv2wrapper.cpp
-  g++ -o build/exiv2wrapper_python.os -c -fPIC -I/usr/include/python2.7 src/exiv2wrapper_python.cpp
-  g++ -o build/libexiv2python.so -shared build/exiv2wrapper.os build/exiv2wrapper_python.os -lboost_python -lexiv2
-  scons: done building targets.
+  $ python3 configure.py [--libboost=FILE]
 
-The result of the build process is a shared library, ``libexiv2python.so``, in
-the build directory::
+The configure script try to find the exact name of `libboost_python3` wich is depending on your environment. If it can't find the lib, give it the full path of this lib with the option *--libboost*. Example on Debian with Python-3.4::
 
-  osomon@granuja:~/dev/pyexiv2$ ls build/
-  exiv2wrapper.os  exiv2wrapper_python.os  libexiv2python.so
+  $ python3 configure.py --libboost=/usr/lib/x86_64-linux-gnu/libboost_python-py34.so
 
-To install pyexiv2 system-wide, just invoke ``scons install``.
-You will most likely need administrative privileges to proceed.
-The ``--user`` switch will install pyexiv2 in the current
-`user site directory <http://www.python.org/dev/peps/pep-0370/>`_
-(Python ≥ 2.6 is required).
+Build the lib::
 
-Note to packagers:
-if `DESTDIR <http://www.gnu.org/prep/standards/html_node/DESTDIR.html>`_ is
-specified on the command line when invoking ``scons install``, its value will be
-prepended to each installed target file.
+  $ ./build.sh
+
+The result of the build process is a shared library, ``libexiv2python.so``, in the build directory::
+
+  $ ls build/
+  $ exiv2wrapper.os  exiv2wrapper_python.os  libexiv2python.so
+
+And, if no error, install all the files::
+
+  $ ./build.sh -i
+
+You will most likely need administrative privileges to the last step.
+
 
 Windows
 +++++++
