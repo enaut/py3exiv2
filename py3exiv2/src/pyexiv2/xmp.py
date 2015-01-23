@@ -457,7 +457,7 @@ class XmpTag(object):
                 raise XmpValueError(value, type)
 
         elif type == '':
-            # Unknown type, assume string
+            # Undefined type
             if isinstance(value, str):
                 try:
                     return value.encode('utf-8')
