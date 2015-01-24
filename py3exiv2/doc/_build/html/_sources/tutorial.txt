@@ -1,15 +1,15 @@
 Tutorial
 ========
 
-This tutorial is meant to give you a quick overview of what pyexiv2 allows you
+This tutorial is meant to give you a quick overview of what py3exiv2 allows you
 to do. You can just read it through or follow it interactively, in which case
-you will need to have pyexiv2 installed.
-It doesn't cover all the possibilities offered by pyexiv2, only a basic subset
+you will need to have py3exiv2 installed.
+It doesn't cover all the possibilities offered by py3exiv2, only a basic subset
 of them. For complete reference, see the :doc:`api`.
 
 Let's get started!
 
-First of all, we import the pyexiv2 module::
+Remember, the lib is named py3exiv2 but the top-level module, for compatibility reasons, is named pyexiv2. So, we import the pyexiv2 module::
 
   >>> import pyexiv2
 

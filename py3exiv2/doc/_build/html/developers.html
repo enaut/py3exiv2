@@ -78,7 +78,7 @@ issue the following command in a terminal:</p>
 <a class="reference external" href="http://pytz.sourceforge.net/">python-tz</a>.
 This dependency is optional: the corresponding tests will be skipped if it is
 not present on the system.</p>
-<p>Additionally, if you want to cross-compile pyexiv2 for Windows and generate a
+<p>Additionally, if you want to cross-compile py3exiv2 for Windows and generate a
 Windows installer, you will need the following dependencies:</p>
 <ul class="simple">
 <li><a class="reference external" href="http://www.mingw.org/">MinGW</a></li>
@@ -121,7 +121,7 @@ $ exiv2wrapper.os  exiv2wrapper_python.os  libexiv2python.so
 <h3>Windows<a class="headerlink" href="#windows" title="Permalink to this headline">¶</a></h3>
 <p>The top-level directory of the development branch contains a shell script named
 <tt class="docutils literal"><span class="pre">cross-compile.sh</span></tt> that retrieves all the dependencies required and
-cross-compiles pyexiv2 for Windows on a Linux host.
+cross-compiles py3exiv2 for Windows on a Linux host.
 Read the comments in the header of the script to know the pre-requisites.</p>
 <p>The result of the compilation is a DLL, <tt class="docutils literal"><span class="pre">libexiv2python.pyd</span></tt>, in the build
 directory. This file and the <tt class="docutils literal"><span class="pre">pyexiv2</span></tt> folder in <tt class="docutils literal"><span class="pre">src</span></tt> should be copied to
@@ -135,37 +135,32 @@ From the top-level directory of the branch, run the following command:</p>
 </pre></div>
 </div>
 <p>This will generate a ready-to-distribute installer executable named
-<tt class="docutils literal"><span class="pre">pyexiv2-0.3-setup.exe</span></tt>.</p>
+<tt class="docutils literal"><span class="pre">py3exiv2-0.3-setup.exe</span></tt>.</p>
 </div>
 </div>
 <div class="section" id="documentation">
 <h2>Documentation<a class="headerlink" href="#documentation" title="Permalink to this headline">¶</a></h2>
 <p>The present documentation is generated using
 <a class="reference external" href="http://sphinx.pocoo.org/">Sphinx</a> from reStructuredText sources found in the
-doc/ directory. Invoke <tt class="docutils literal"><span class="pre">scons</span> <span class="pre">doc</span></tt> to (re)build the HTML documentation.
-Alternatively, you can issue the following command:</p>
-<div class="highlight-python"><div class="highlight"><pre>sphinx-build -b html doc/ doc/_build/
-</pre></div>
-</div>
-<p>The index of the documentation will then be found under doc/_build/index.html.</p>
+doc/ directory. Invoke <tt class="docutils literal"><span class="pre">make</span> <span class="pre">html</span></tt> to (re)build the HTML documentation.</p>
+<p>The index of the documentation will then be found under doc/_build/html/index.html.</p>
 </div>
 <div class="section" id="unit-tests">
 <h2>Unit tests<a class="headerlink" href="#unit-tests" title="Permalink to this headline">¶</a></h2>
-<p>pyexiv2&#8217;s source comes with a battery of unit tests, in the test/ directory.
-To run them, invoke <tt class="docutils literal"><span class="pre">scons</span> <span class="pre">test</span></tt>.
-Alternatively, you can execute the <tt class="docutils literal"><span class="pre">TestsRunner.py</span></tt> script.</p>
+<p>py3exiv2&#8217;s source comes with a battery of unit tests, in the test/ directory.
+To run them, invoke <tt class="docutils literal"><span class="pre">python3</span> <span class="pre">TestsRunner.py</span></tt>.</p>
 </div>
 <div class="section" id="contributing">
 <h2>Contributing<a class="headerlink" href="#contributing" title="Permalink to this headline">¶</a></h2>
-<p>pyexiv2 is Free Software, meaning that you are encouraged to use it, modify it
+<p>py3exiv2 is Free Software, meaning that you are encouraged to use it, modify it
 to suit your needs, contribute back improvements, and redistribute it.</p>
-<p><a class="reference external" href="https://bugs.launchpad.net/pyexiv2">Bugs</a> are tracked on Launchpad.
+<p><a class="reference external" href="https://bugs.launchpad.net/py3exiv2">Bugs</a> are tracked on Launchpad.
 There is a team called
-<a class="reference external" href="https://launchpad.net/~pyexiv2-developers">pyexiv2-developers</a> open to anyone
-interested in following development on pyexiv2. Don&#8217;t hesitate to subscribe to
+<a class="reference external" href="https://launchpad.net/~py3exiv2-team">py3exiv2-developers</a> open to anyone
+interested in following development on py3exiv2. Don&#8217;t hesitate to subscribe to
 the team (you don&#8217;t need to actually contribute!) and to the associated mailing
 list.</p>
-<p>There are several ways in which you can contribute to improve pyexiv2:</p>
+<p>There are several ways in which you can contribute to improve py3exiv2:</p>
 <ul class="simple">
 <li>Use it;</li>
 <li>Give your feedback and discuss issues and feature requests on the
@@ -176,7 +171,7 @@ mailing list;</li>
 <p>When reporting a bug, don&#8217;t forget to include the following information in the
 report:</p>
 <ul class="simple">
-<li>version of pyexiv2</li>
+<li>version of py3exiv2</li>
 <li>version of libexiv2 it was compiled against</li>
 <li>a minimal script that reliably reproduces the issue</li>
 <li>a sample image file with which the bug can reliably be reproduced</li>
