@@ -11,9 +11,7 @@ py3exiv2 is a `Python 3 <https://docs.python.org/3/>`_ binding to
 for manipulation of :abbr:`EXIF (EXchangeable Image File)`,
 :abbr:`IPTC (International Press Telecommunications Council)` and
 :abbr:`XMP (eXtensible Metadata Platform)` image metadata.
-It is a python 3 module that allows your scripts to read and write
-metadata (EXIF, IPTC, XMP, thumbnails) embedded in image files
-(JPEG, TIFF, ...).
+It is a python 3 module that allows your scripts to read and write metadata (EXIF, IPTC, XMP, thumbnails) embedded in image files (JPEG, TIFF, ...).
 
 It is designed as a high-level interface to the functionalities offered by
 libexiv2. Using python's built-in data types and standard modules, it provides
