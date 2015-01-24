@@ -20,7 +20,7 @@ libexiv2. Using python's built-in data types and standard modules, it provides
 easy manipulation of image metadata.
 
 py3exiv2 is distributed under the
-`GPL version 2 <http://www.gnu.org/licenses/old-licenses/gpl-2.0.html>`_
+`GPL version 3 <http://www.gnu.org/licenses/gpl.html>`_
 license.
 
 The main content of the code was initially written by Olivier Tilloy for 

@@ -123,7 +123,7 @@ to suit your needs, contribute back improvements, and redistribute it.
 
 `Bugs <https://bugs.launchpad.net/py3exiv2>`_ are tracked on Launchpad.
 There is a team called
-`py3exiv2-developers <https://launchpad.net/~py3exiv2-developers>`_ open to anyone
+`py3exiv2-developers <https://launchpad.net/~py3exiv2-team>`_ open to anyone
 interested in following development on py3exiv2. Don't hesitate to subscribe to
 the team (you don't need to actually contribute!) and to the associated mailing
 list.

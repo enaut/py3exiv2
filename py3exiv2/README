@@ -40,8 +40,8 @@ To build and install the library, while in the top-level directory
 run the following commands:
 
  $ python3 configure.py     # To chek your environment and write the Makefile
- $ ./build.sh                     # To compile the lib
- $ ./build.sh -i                  # as administrator to install all files
+ $ ./build.sh               # To compile the lib
+ $ ./build.sh -i            # as administrator to install all files
 
 You can run configure.py with the following arguments:
     -h                  show the help message and exit
@@ -74,9 +74,8 @@ Copyright (C) 2006-2011 Olivier Tilloy <olivier@tilloy.net>
 Copyright (C) 2015 Vincent Vande Vyvre <vincent.vandevyvre@oqapy.eu>
 
 py3exiv2 is free software; you can redistribute it and/or modify it under
-the terms of the GNU General Public License as published by the Free
-Software Foundation; either version 2 of the License, or (at your
-option) any later version.
+the terms of the GNU General Public License version 3 as published by the Free
+Software Foundation.
 
 py3exiv2 is distributed in the hope that it will be useful, but WITHOUT
 ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
