@@ -55,7 +55,7 @@ Linux
 
 Open a terminal into the top-level directory (where is the file *configure.py*)::
 
-  $ python3 configure.py [--libboost=FILE]
+  $ python3 configure.py
 
 The configure script try to find the exact name of `libboost_python3` wich is depending on your environment. If it can't find the lib, give it the full path of this lib with the option *--libboost*. Example on Debian with Python-3.4::
 

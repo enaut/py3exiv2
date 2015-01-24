@@ -41,7 +41,6 @@ def get_maker_infos(data):
 
 def get_shoot_infos(data):
     """Returns the shooting technical infos."""
-
     dct = {}
     for name, dkey in {"Exposure time:": "Exif.Photo.ExposureTime",
                        "FNumber:": "Exif.Photo.FNumber",
@@ -76,7 +75,7 @@ def show_author_infos(data):
         copy = "N-A"
     print(' Copyrights:\t%s' % copy)
     try:
-        mail = data['Iptc.Application2.0x00d7'].value
+        mail = data['Iptc.Application2.0x00d6'].value
     except KeyError:
         return
     if mail:
@@ -84,7 +83,7 @@ def show_author_infos(data):
 
 def show_description(data):
     """Print the scene description."""
-    print('\n Scene Description\n' + '-' * 17)
+    print('\n Scene Description\n' + '-' * 18)
     try:
         scene = " ".join(data['Iptc.Application2.Headline'].value)
     except KeyError:

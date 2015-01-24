@@ -36,7 +36,7 @@ Some unit tests have a dependency on
 This dependency is optional: the corresponding tests will be skipped if it is
 not present on the system.
 
-Additionally, if you want to cross-compile pyexiv2 for Windows and generate a
+Additionally, if you want to cross-compile py3exiv2 for Windows and generate a
 Windows installer, you will need the following dependencies:
 
 * `MinGW <http://www.mingw.org/>`_
@@ -82,7 +82,7 @@ Windows
 
 The top-level directory of the development branch contains a shell script named
 ``cross-compile.sh`` that retrieves all the dependencies required and
-cross-compiles pyexiv2 for Windows on a Linux host.
+cross-compiles py3exiv2 for Windows on a Linux host.
 Read the comments in the header of the script to know the pre-requisites.
 
 The result of the compilation is a DLL, ``libexiv2python.pyd``, in the build
@@ -98,41 +98,37 @@ From the top-level directory of the branch, run the following command::
   makensis win32-installer.nsi
 
 This will generate a ready-to-distribute installer executable named
-``pyexiv2-0.3-setup.exe``.
+``py3exiv2-0.3-setup.exe``.
 
 Documentation
 #############
 
 The present documentation is generated using
 `Sphinx <http://sphinx.pocoo.org/>`_ from reStructuredText sources found in the
-doc/ directory. Invoke ``scons doc`` to (re)build the HTML documentation.
-Alternatively, you can issue the following command::
+doc/ directory. Invoke ``make html`` to (re)build the HTML documentation.
 
-  sphinx-build -b html doc/ doc/_build/
-
-The index of the documentation will then be found under doc/_build/index.html.
+The index of the documentation will then be found under doc/_build/html/index.html.
 
 Unit tests
 ##########
 
-pyexiv2's source comes with a battery of unit tests, in the test/ directory.
-To run them, invoke ``scons test``.
-Alternatively, you can execute the ``TestsRunner.py`` script.
+py3exiv2's source comes with a battery of unit tests, in the test/ directory.
+To run them, invoke ``python3 TestsRunner.py``.
 
 Contributing
 ############
 
-pyexiv2 is Free Software, meaning that you are encouraged to use it, modify it
+py3exiv2 is Free Software, meaning that you are encouraged to use it, modify it
 to suit your needs, contribute back improvements, and redistribute it.
 
-`Bugs <https://bugs.launchpad.net/pyexiv2>`_ are tracked on Launchpad.
+`Bugs <https://bugs.launchpad.net/py3exiv2>`_ are tracked on Launchpad.
 There is a team called
-`pyexiv2-developers <https://launchpad.net/~pyexiv2-developers>`_ open to anyone
-interested in following development on pyexiv2. Don't hesitate to subscribe to
+`py3exiv2-developers <https://launchpad.net/~py3exiv2-developers>`_ open to anyone
+interested in following development on py3exiv2. Don't hesitate to subscribe to
 the team (you don't need to actually contribute!) and to the associated mailing
 list.
 
-There are several ways in which you can contribute to improve pyexiv2:
+There are several ways in which you can contribute to improve py3exiv2:
 
 * Use it;
 * Give your feedback and discuss issues and feature requests on the
@@ -143,7 +139,7 @@ There are several ways in which you can contribute to improve pyexiv2:
 When reporting a bug, don't forget to include the following information in the
 report:
 
-* version of pyexiv2
+* version of py3exiv2
 * version of libexiv2 it was compiled against
 * a minimal script that reliably reproduces the issue
 * a sample image file with which the bug can reliably be reproduced

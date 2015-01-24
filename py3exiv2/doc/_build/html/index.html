@@ -63,6 +63,15 @@ easy manipulation of image metadata.</p>
 license.</p>
 <p>The main content of the code was initially written by Olivier Tilloy for
 Python 2 under the name <a class="reference external" href="http://tilloy.net/dev/pyexiv2/index.html">pyexiv2</a>.</p>
+<p><strong>Differences between py3exiv2 (Python 3) and pyexiv2 (Python 2)</strong></p>
+<p>The module&#8217;s name and the syntax are unchanged, your code written previously for Python 2 may run with py3exiv2, however there&#8217;s three thinks that you should be care.</p>
+<blockquote>
+<div><ul class="simple">
+<li>The deprecated <tt class="docutils literal"><span class="pre">IptcTag.raw_values</span></tt> was removed in py3exiv2, use <tt class="docutils literal"><span class="pre">IptcTag.raw_value</span></tt> instead.</li>
+<li>The <tt class="docutils literal"><span class="pre">pyexiv2.exif.ExifThumbnail.data</span></tt> and <tt class="docutils literal"><span class="pre">pyexiv2.preview.Preview.data</span></tt> are not yet implemented.</li>
+<li>All the string returned by any <tt class="docutils literal"><span class="pre">Tag.value</span></tt> are unicode, but you don&#8217;t need to convert yours strings in bytes to set a value for a tag which only accept ASCII characters, this is the job of py3exiv2.</li>
+</ul>
+</div></blockquote>
 <p>Contents:</p>
 <div class="toctree-wrapper compound">
 <ul>
