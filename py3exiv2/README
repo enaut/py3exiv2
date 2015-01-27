@@ -16,7 +16,7 @@ Build dependencies
 
 py3exiv2 depends on the following libraries:
 
- * python (≥ 3.3)
+ * python (≥ 3.2)
  * boost.python3 (http://www.boost.org/libs/python/doc/index.html)
  * exiv2 (http://www.exiv2.org/)
 
@@ -28,7 +28,7 @@ This is a typical list of build dependencies for a Debian/Ubuntu system:
 
  * python-all-dev (≥ 3.2)
  * libexiv2-dev (≥ 0.20)
- * libboost-python-dev (≥ 1.35)
+ * libboost-python-dev (≥ 1.48)
  * g++
 
 
@@ -54,13 +54,18 @@ module, pyexiv2.
 The `./build.sh -i` command installs the two modules in your site-specific directory
 for Python modules (e.g. '/usr/lib/python3/dist-packages/' on Linux).
 
-To use pyexiv2 in your scripts, simply import the pyexiv2 module.
+To use py3exiv2 in your scripts, simply import the pyexiv2 module.
+
+Note: the lib name is py3exiv2 but, for compatibility, the top-level module 
+      is named pyexiv2
 
 
 Documentation
 =============
 
-Please refer to the internal documentation for a guide on how to use pyexiv2.
+You can find the API documentation at: 
+    http://python3-exiv2.readthedocs.org/en/latest
+or refer to the internal documentation for a guide on how to use py3exiv2.
 In a python interpreter, type:
 
  >>> import pyexiv2
