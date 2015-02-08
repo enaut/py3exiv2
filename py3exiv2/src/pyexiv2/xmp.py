@@ -463,7 +463,7 @@ class XmpTag(object):
                 except UnicodeEncodeError:
                     raise XmpValueError(value, type)
 
-            elif isinstance(value, datetime.datetime):
+            elif isinstance(value, (datetime.date, datetime.datetime)):
                 return DateTimeFormatter.xmp(value)
 
         raise NotImplementedError('XMP conversion for type [%s]' % type)

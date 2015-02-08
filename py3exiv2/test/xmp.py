@@ -398,9 +398,9 @@ class TestXmpNamespaces(unittest.TestCase):
         register_namespace('foobar/', 'far')
         key = 'Xmp.far.foo'
         value = datetime.date.today()
-        self.assertRaises(NotImplementedError, self.metadata.__setitem__, key, value)
-        value = datetime.datetime.now()
-        self.assertRaises(NotImplementedError, self.metadata.__setitem__, key, value)
+        dt = '%04d-%02d-%02d' % (value.year, value.month, value.day)
+        self.metadata[key] = value
+        self.assertEqual(self.metadata[key].raw_value, dt)
         value = ['foo', 'bar']
         self.assertRaises(NotImplementedError, self.metadata.__setitem__, key, value)
         value = {'x-default': 'foo', 'fr-FR': 'bar'}
