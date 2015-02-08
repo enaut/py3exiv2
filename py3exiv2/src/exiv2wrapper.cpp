@@ -484,7 +484,7 @@ void Image::writeExifThumbnailToFile(const std::string& path)
     _getExifThumbnail()->writeFile(path);
 }
 
-const std::vector<char> Image::getExifThumbnailData()
+const std::string Image::getExifThumbnailData()
 {
     Exiv2::DataBuf buffer = _getExifThumbnail()->copy();
     // Copy the data buffer in a string. Since the data buffer can contain null
@@ -493,7 +493,7 @@ const std::vector<char> Image::getExifThumbnailData()
     // because it would be truncated after the first occurence of a null
     // character. Therefore, it has to be copied character by character.
     // First allocate the memory for the whole string...
-    std::vector<char> data(buffer.size_);
+    std::string data = std::string(buffer.size_, ' ');
     // ... then fill it with the raw data.
     for(unsigned int i = 0; i < buffer.size_; ++i)
     {

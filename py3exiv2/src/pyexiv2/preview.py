@@ -66,9 +66,9 @@ class Preview(object):
     @property
     def data(self):
         """The preview image data buffer."""
-        print('Thumbnail data not implemented')
+        sys.stdout.write('Thumbnail data not implemented')
         return
-        buf = self.__preview.data.tobytes()
+        buf = self.__preview.data
         return buf
 
     def write_to_file(self, path):
