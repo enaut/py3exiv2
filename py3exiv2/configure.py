@@ -46,7 +46,7 @@ def get_libboost_name():
             if '.so' in l:
                 l = l.split('.so')[0]
                 # Assume there's no longer python2.3 in the wild
-                if '3' in l[2:]:
+                if '3' in l[-3:]:
                     return l.replace('libboost', 'lboost')
 
 def make_build_dir():
