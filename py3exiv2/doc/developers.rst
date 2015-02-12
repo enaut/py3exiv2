@@ -27,8 +27,8 @@ To use py3exiv2:
 To build py3exiv2:
 
 * `python-all-dev` (≥ 3.2)
-* `libexiv2-dev` (≥ 0.20)        # `exiv2-devel` on fedora
-* `libboost-python-dev` (≥ 1.35) # `boost-devel` on fedora
+* `libexiv2-dev` (≥ 0.20)
+* `libboost-python-dev` (≥ 1.45)
 * `g++`
 
 Some unit tests have a dependency on
@@ -42,10 +42,6 @@ Windows installer, you will need the following dependencies:
 * `MinGW <http://www.mingw.org/>`_
 * `7-Zip <http://7-zip.org/>`_
 * `NSIS <http://nsis.sourceforge.net/>`_
-
-A typical list of packages to install on a Debian/Ubuntu system is::
-
-  mingw32 p7zip-full nsis
 
 Building and installing
 #######################
@@ -76,29 +72,6 @@ And, if no error, install all the files::
 
 You will most likely need administrative privileges to the last step.
 
-
-Windows
-+++++++
-
-The top-level directory of the development branch contains a shell script named
-``cross-compile.sh`` that retrieves all the dependencies required and
-cross-compiles py3exiv2 for Windows on a Linux host.
-Read the comments in the header of the script to know the pre-requisites.
-
-The result of the compilation is a DLL, ``libexiv2python.pyd``, in the build
-directory. This file and the ``pyexiv2`` folder in ``src`` should be copied to
-the system-wide site directory of a Python 2.7 setup
-(typically ``C:\Python27\Lib\site-packages\``) or to the user site directory
-(``%APPDATA%\Python\Python27\site-packages\``).
-
-The top-level directory of the branch also contains an NSIS installer script
-named ``win32-installer.nsi``.
-From the top-level directory of the branch, run the following command::
-
-  makensis win32-installer.nsi
-
-This will generate a ready-to-distribute installer executable named
-``py3exiv2-0.3-setup.exe``.
 
 Documentation
 #############

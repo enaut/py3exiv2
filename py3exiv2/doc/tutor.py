@@ -131,6 +131,9 @@ def print_xmp(data):
             print(' %-28s%-26s%-55s%s' % (key, type_, tag.value, type(tag.value)))
         except Exception as why:
             print('Error: %s\n\t%s' %(key, why))
+    tag = data['Exif.Photo.UserComment']
+    type_ = tag.type
+    print(' %-28s%-26s%-55s%s' % ('Exif.Photo.UserComment', type_, tag.value, type(tag.value)))
 
 def show_preview(data):
     print('  Previews\n----------')
@@ -163,6 +166,7 @@ def create_new_data(data):
     # A langage written from right to left
     value = ' אלעד גרשגורן'
     data[key] = value
+    data['Exif.Photo.UserComment'] = "Commentaire à èèèééïç accentué"
 
 def main():
     # First, make a copy of our original image
