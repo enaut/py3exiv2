@@ -65,9 +65,6 @@ class ImageMetadata(MutableMapping):
         :type filename: string
         """
         self.filename = filename
-        # FIXME removed for Py3
-        #if filename is not None and isinstance(filename, unicode):
-            #self.filename = filename.encode(sys.getfilesystemencoding())
         self.__image = None
         self._keys = {'exif': None, 'iptc': None, 'xmp': None}
         self._tags = {'exif': {}, 'iptc': {}, 'xmp': {}}
