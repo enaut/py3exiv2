@@ -81,6 +81,7 @@ class ImageMetadata(MutableMapping):
         # the internal image reference by a mock.
         if not os.path.exists(filename) or not os.path.isfile(filename):
             raise IOError(ENOENT, os.strerror(ENOENT), filename)
+
         # Remember the reference timestamps before doing any access to the file
         stat = os.stat(filename)
         self._atime = stat.st_atime
@@ -102,34 +103,37 @@ class ImageMetadata(MutableMapping):
     def _image(self):
         if self.__image is None:
             raise IOError('Image metadata has not been read yet')
+
         return self.__image
 
     def read(self):
-        """
-        Read the metadata embedded in the associated image.
+        """Read the metadata embedded in the associated image.
+
         It is necessary to call this method once before attempting to access
         the metadata (an exception will be raised if trying to access metadata
         before calling this method).
         """
         if self.__image is None:
             self.__image = self._instantiate_image(self.filename)
+
         self.__image._readMetadata()
 
     def write(self, preserve_timestamps=False):
-        """
-        Write the metadata back to the image.
+        """Write the metadata back to the image.
 
-        :param preserve_timestamps: whether to preserve the file's original
-                                    timestamps (access time and modification
-                                    time)
-        :type preserve_timestamps: boolean
+        Args:
+        preserve_timestamps -- whether to preserve the file's original
+                               timestamps (access time and modification time)
+                               Type: boolean
         """
         self._image._writeMetadata()
         if self.filename is None:
             return
+
         if preserve_timestamps:
             # Revert to the original timestamps
             os.utime(self.filename, (self._atime, self._mtime))
+
         else:
             # Reset the reference timestamps
             stat = os.stat(self.filename)
@@ -139,38 +143,56 @@ class ImageMetadata(MutableMapping):
     @property
     def dimensions(self):
         """A tuple containing the width and height of the image, expressed in
-        pixels."""
+        pixels.
+
+        """
         return (self._image._getPixelWidth(), self._image._getPixelHeight())
 
     @property
     def mime_type(self):
-        """The mime type of the image, as a string."""
+        """The mime type of the image, as a string.
+
+        """
         return self._image._getMimeType()
 
     @property
     def exif_keys(self):
-        """List of the keys of the available EXIF tags."""
+        """Return the list of the keys of the available EXIF tags.
+
+        """
         if self._keys['exif'] is None:
             self._keys['exif'] = self._image._exifKeys()
+
         return self._keys['exif']
 
     @property
     def iptc_keys(self):
-        """List of the keys of the available IPTC tags."""
+        """Return the list of the keys of the available IPTC tags.
+
+        """
         if self._keys['iptc'] is None:
             self._keys['iptc'] = self._image._iptcKeys()
+
         return self._keys['iptc']
 
     @property
     def xmp_keys(self):
-        """List of the keys of the available XMP tags."""
+        """Return the list of the keys of the available XMP tags.
+
+        """
         if self._keys['xmp'] is None:
             self._keys['xmp'] = self._image._xmpKeys()
+
         return self._keys['xmp']
 
     def _get_exif_tag(self, key):
-        # Return the EXIF tag for the given key.
-        # Throw a KeyError if the tag doesn't exist.
+        """Return the EXIF tag for the given key.
+
+        Throw a KeyError if the tag doesn't exist.
+
+        Args:
+        key -- the exif key
+        """
         try:
             return self._tags['exif'][key]
         except KeyError:
@@ -180,8 +202,13 @@ class ImageMetadata(MutableMapping):
             return tag
 
     def _get_iptc_tag(self, key):
-        # Return the IPTC tag for the given key.
-        # Throw a KeyError if the tag doesn't exist.
+        """Return the IPTC tag for the given key.
+
+        Throw a KeyError if the tag doesn't exist.
+
+        Args:
+        key -- the iptc key
+        """
         try:
             return self._tags['iptc'][key]
         except KeyError:
@@ -191,8 +218,13 @@ class ImageMetadata(MutableMapping):
             return tag
 
     def _get_xmp_tag(self, key):
-        # Return the XMP tag for the given key.
-        # Throw a KeyError if the tag doesn't exist.
+        """Return the XMP tag for the given key.
+
+        Throw a KeyError if the tag doesn't exist.
+
+        Args:
+        key -- the xmp key
+        """
         try:
             return self._tags['xmp'][key]
         except KeyError:
@@ -202,29 +234,36 @@ class ImageMetadata(MutableMapping):
             return tag
 
     def __getitem__(self, key):
-        """
-        Get a metadata tag for a given key.
+        """Return a metadata tag for a given key.
 
-        :param key: metadata key in the dotted form
-                    ``familyName.groupName.tagName`` where ``familyName`` may
-                    be one of ``exif``, ``iptc`` or ``xmp``.
-        :type key: string
+        Raise KeyError if the tag doesn't exist
 
-        :raise KeyError: if the tag doesn't exist
+        Args:
+        key -- metadata key in the dotted form
+               ``familyName.groupName.tagName`` where ``familyName`` may
+               be one of ``exif``, ``iptc`` or ``xmp``.
         """
         family = key.split('.')[0].lower()
         if family in ('exif', 'iptc', 'xmp'):
             return getattr(self, '_get_%s_tag' % family)(key)
+
         else:
             raise KeyError(key)
 
     def _set_exif_tag(self, key, tag_or_value):
-        # Set an EXIF tag. If the tag already exists, its value is overwritten.
+        """Set an EXIF tag. If the tag already exists, its value is overwritten.
+
+        Args:
+        key -- the EXIF key
+        tag_or_value -- an ExifTag instance or the value of the data
+        """
         if isinstance(tag_or_value, ExifTag):
             tag = tag_or_value
+
         else:
             # As a handy shortcut, accept direct value assignment.
             tag = ExifTag(key, tag_or_value)
+
         tag._set_owner(self)
         self._tags['exif'][tag.key] = tag
         if tag.key not in self.exif_keys:
