@@ -60,9 +60,10 @@ class ImageMetadata(MutableMapping):
     """
 
     def __init__(self, filename):
-        """
-        :param filename: path to an image file
-        :type filename: string
+        """Instanciate the ImageMeatadata class.
+
+        Args:
+        filename: str(path to an image file)
         """
         self.filename = filename
         self.__image = None
@@ -71,6 +72,11 @@ class ImageMetadata(MutableMapping):
         self._exif_thumbnail = None
 
     def _instantiate_image(self, filename):
+        """Instanciate the exiv2 image.
+
+        Args:
+        filename -- str(path to an image file)
+        """
         # This method is meant to be overridden in unit tests to easily replace
         # the internal image reference by a mock.
         if not os.path.exists(filename) or not os.path.isfile(filename):
@@ -82,15 +88,14 @@ class ImageMetadata(MutableMapping):
         return libexiv2python._Image(filename)
 
     @classmethod
-    def from_buffer(cls, buffer):
-        """
-        Instantiate an image container from an image buffer.
+    def from_buffer(cls, buffer_):
+        """Instantiate an image container from an image memoryview.
 
-        :param buffer: a buffer containing image data
-        :type buffer: bytes
+        Args:
+        buffer_ -- a memoryview containing image data as bytes
         """
         obj = cls(None)
-        obj.__image = libexiv2python._Image(buffer, len(buffer))
+        obj.__image = libexiv2python._Image(buffer_, len(buffer_))
         return obj
 
     @property
