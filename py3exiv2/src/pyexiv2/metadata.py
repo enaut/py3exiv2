@@ -270,107 +270,142 @@ class ImageMetadata(MutableMapping):
             self._keys['exif'].append(tag.key)
 
     def _set_iptc_tag(self, key, tag_or_values):
-        # Set an IPTC tag. If the tag already exists, its values are
-        # overwritten.
+        """Set an IPTC tag. If the tag already exists, its value is overwritten.
+
+        Args:
+        key -- the IPTC key
+        tag_or_value -- an IptcTag instance or the value of the data
+        """
         if isinstance(tag_or_values, IptcTag):
             tag = tag_or_values
+
         else:
             # As a handy shortcut, accept direct value assignment.
             tag = IptcTag(key, tag_or_values)
+
         tag._set_owner(self)
         self._tags['iptc'][tag.key] = tag
         if tag.key not in self.iptc_keys:
             self._keys['iptc'].append(tag.key)
 
     def _set_xmp_tag(self, key, tag_or_value):
-        # Set an XMP tag. If the tag already exists, its value is overwritten.
+        """Set an XMP tag. If the tag already exists, its value is overwritten.
+
+        Args:
+        key -- the XMP key
+        tag_or_value -- an XmpTag instance or the value of the data
+        """
         if isinstance(tag_or_value, XmpTag):
             tag = tag_or_value
+
         else:
             # As a handy shortcut, accept direct value assignment.
             tag = XmpTag(key, tag_or_value)
+
         tag._set_owner(self)
         self._tags['xmp'][tag.key] = tag
         if tag.key not in self.xmp_keys:
             self._keys['xmp'].append(tag.key)
 
     def __setitem__(self, key, tag_or_value):
-        """
-        Set a metadata tag for a given key.
+        """Set a metadata tag for a given key.
+
         If the tag was previously set, it is overwritten.
         As a handy shortcut, a value may be passed instead of a fully formed
         tag. The corresponding tag object will be instantiated.
 
-        :param key: metadata key in the dotted form
-                    ``familyName.groupName.tagName`` where ``familyName`` may
-                    be one of ``exif``, ``iptc`` or ``xmp``.
-        :type key: string
-        :param tag_or_value: an instance of the corresponding family of metadata
-                             tag, or a value
-        :type tag_or_value: :class:`pyexiv2.exif.ExifTag` or
-                            :class:`pyexiv2.iptc.IptcTag` or
-                            :class:`pyexiv2.xmp.XmpTag` or any valid value type
+        Raise KeyError if the key is invalid
 
-        :raise KeyError: if the key is invalid
+        Args:
+        key -- metadata key in the dotted form
+               ``familyName.groupName.tagName`` where ``familyName`` may
+               be one of ``exif``, ``iptc`` or ``xmp``.
+        tag_or_value -- an instance of the corresponding family of metadata
+                        tag or a value
+                        Type: pyexiv2.exif.ExifTag instance or
+                              pyexiv2.iptc.IptcTag instance or
+                              pyexiv2.xmp.XmpTag instance or 
+                              any valid value type
         """
         family = key.split('.')[0].lower()
         if family in ('exif', 'iptc', 'xmp'):
             return getattr(self, '_set_%s_tag' % family)(key, tag_or_value)
+
         else:
             raise KeyError(key)
 
     def _delete_exif_tag(self, key):
-        # Delete an EXIF tag.
-        # Throw a KeyError if the tag doesn't exist.
+        """Delete an EXIF tag.
+
+        Throw a KeyError if the tag doesn't exist.
+
+        Args:
+        key -- the EXIF key
+        """
         if key not in self.exif_keys:
             raise KeyError('Cannot delete an inexistent tag')
+
         self._image._deleteExifTag(key)
         try:
             del self._tags['exif'][key]
         except KeyError:
             # The tag was not cached.
             pass
+
         if self._keys['exif'] is not None:
             self._keys['exif'].remove(key)
 
     def _delete_iptc_tag(self, key):
-        # Delete an IPTC tag.
-        # Throw a KeyError if the tag doesn't exist.
+        """Delete an IPTC tag.
+
+        Throw a KeyError if the tag doesn't exist.
+
+        Args:
+        key -- the IPTC key
+        """
         if key not in self.iptc_keys:
             raise KeyError('Cannot delete an inexistent tag')
+
         self._image._deleteIptcTag(key)
         try:
             del self._tags['iptc'][key]
         except KeyError:
             # The tag was not cached.
             pass
+
         if self._keys['iptc'] is not None:
             self._keys['iptc'].remove(key)
 
     def _delete_xmp_tag(self, key):
-        # Delete an XMP tag.
-        # Throw a KeyError if the tag doesn't exist.
+        """Delete an XMP tag.
+
+        Throw a KeyError if the tag doesn't exist.
+
+        Args:
+        key -- the XMP key
+        """
         if key not in self.xmp_keys:
             raise KeyError('Cannot delete an inexistent tag')
+
         self._image._deleteXmpTag(key)
         try:
             del self._tags['xmp'][key]
         except KeyError:
             # The tag was not cached.
             pass
+
         if self._keys['xmp'] is not None:
             self._keys['xmp'].remove(key)
 
     def __delitem__(self, key):
-        """
-        Delete a metadata tag for a given key.
+        """Delete a metadata tag for a given key.
 
-        :param key: metadata key in the dotted form
-                    ``familyName.groupName.tagName`` where ``familyName`` may
-                    be one of ``exif``, ``iptc`` or ``xmp``.
-        :type key: string
+        Raise KeyError if the tag with the given key doesn't exist
 
-        :raise KeyError: if the tag with the given key doesn't exist
+        Args:
+        key -- the metadata key in the dotted form
+               ``familyName.groupName.tagName`` where ``familyName`` may
+               be one of ``exif``, ``iptc`` or ``xmp``.
         """
         family = key.split('.')[0].lower()
         if family in ('exif', 'iptc', 'xmp'):
@@ -390,6 +425,7 @@ class ImageMetadata(MutableMapping):
     def _set_comment(self, comment):
         if comment is not None:
             self._image._setComment(comment)
+
         else:
             self._del_comment()
 
@@ -402,46 +438,47 @@ class ImageMetadata(MutableMapping):
     @property
     def previews(self):
         """List of the previews available in the image, sorted by increasing
-        size."""
+        size.
+
+        """
         return [Preview(preview) for preview in self._image._previews()]
 
     def copy(self, other, exif=True, iptc=True, xmp=True, comment=True):
-        """
-        Copy the metadata to another image.
+        """Copy the metadata to another image.
+
         The metadata in the destination is overridden. In particular, if the
         destination contains e.g. EXIF data and the source doesn't, it will be
         erased in the destination, unless explicitly omitted.
 
-        :param other: the destination metadata to copy to (it must have been
-                      :meth:`.read` beforehand)
-        :type other: :class:`pyexiv2.metadata.ImageMetadata`
-        :param exif: whether to copy the EXIF metadata
-        :type exif: boolean
-        :param iptc: whether to copy the IPTC metadata
-        :type iptc: boolean
-        :param xmp: whether to copy the XMP metadata
-        :type xmp: boolean
-        :param comment: whether to copy the image comment
-        :type comment: boolean
+        Args:
+        other -- the destination metadata to copy to (it must have been
+                 read beforehand)
+                 Type: pyexiv2.metadata.ImageMetadata instance
+        exif -- whether to copy the EXIF metadata, default True
+        iptc -- whether to copy the IPTC metadata, default True
+        xmp -- whether to copy the XMP metadata, default True
+        comment -- whether to copy the image comment, default True 
         """
         self._image._copyMetadata(other._image, exif, iptc, xmp)
         # Empty the cache where needed
         if exif:
             other._keys['exif'] = None
             other._tags['exif'] = {}
+
         if iptc:
             other._keys['iptc'] = None
             other._tags['iptc'] = {}
+
         if xmp:
             other._keys['xmp'] = None
             other._tags['xmp'] = {}
+
         if comment:
             other.comment = self.comment
 
     @property
     def buffer(self):
-        """
-        The image buffer as a string.
+        """The image buffer as a string.
         If metadata has been modified, the data won't be up-to-date until
         :meth:`.write` has been called.
         """
@@ -449,15 +486,19 @@ class ImageMetadata(MutableMapping):
 
     @property
     def exif_thumbnail(self):
-        """A thumbnail image optionally embedded in the EXIF data."""
+        """A thumbnail image optionally embedded in the EXIF data.
+
+        """
         if self._exif_thumbnail is None:
             self._exif_thumbnail = ExifThumbnail(self)
+
         return self._exif_thumbnail
 
     def _get_iptc_charset(self):
         value = self._image._getIptcCharset()
         if value != '':
             return value.lower()
+
         else:
             return None
 
@@ -465,10 +506,12 @@ class ImageMetadata(MutableMapping):
         if charset is None:
             self._del_iptc_charset()
             return
+
         try:
             name = codecs.lookup(charset).name
         except LookupError as error:
             raise ValueError(error)
+
         else:
             charsets = {'utf-8': '\x1b%G'}
             try:
