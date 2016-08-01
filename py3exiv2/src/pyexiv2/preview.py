@@ -3,7 +3,7 @@
 # ******************************************************************************
 #
 # Copyright (C) 2010 Olivier Tilloy <olivier@tilloy.net>
-# Copyright (C) 2015 Vincent Vande Vyvre <vincent.vandevyvre@oqapy.eu>
+# Copyright (C) 2015-2016 Vincent Vande Vyvre <vincent.vandevyvre@oqapy.eu>
 #
 # This file is part of the py3exiv2 distribution.
 #
@@ -20,8 +20,7 @@
 # along with py3exiv2; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, 5th Floor, Boston, MA 02110-1301 USA.
 #
-# Author: Olivier Tilloy <olivier@tilloy.net>
-# Hacking to Python3: Vincent Vande Vyvre <vincent.vandevyvre@oqapy.eu>
+# Maintainer: Vincent Vande Vyvre <vincent.vandevyvre@oqapy.eu>
 #
 # ******************************************************************************
 
@@ -33,9 +32,8 @@ Provide the Preview class.
 import sys
 
 class Preview(object):
+    """A preview image (properties and data buffer) embedded in image metadata.
 
-    """
-    A preview image (properties and data buffer) embedded in image metadata.
     """
 
     def __init__(self, preview):
@@ -43,41 +41,50 @@ class Preview(object):
 
     @property
     def mime_type(self):
-        """The mime type of the preview image (e.g. ``image/jpeg``)."""
+        """The mime type of the preview image (e.g. ``image/jpeg``).
+
+        """
         return self.__preview.mime_type
 
     @property
     def extension(self):
-        """The file extension of the preview image with a leading dot
-        (e.g. ``.jpg``)."""
+        """The file extension of the preview image with a leading dot.
+
+        """
         return self.__preview.extension
 
     @property
     def size(self):
-        """The size of the preview image in bytes."""
+        """The size of the preview image in bytes.
+
+        """
         return self.__preview.size
 
     @property
     def dimensions(self):
         """A tuple containing the width and height of the preview image
-        in pixels."""
+        in pixels.
+
+        """
         return self.__preview.dimensions
 
     @property
     def data(self):
-        """The preview image data buffer."""
+        """The preview image data buffer.
+
+        """
         sys.stdout.write('Thumbnail data not implemented')
         return
         buf = self.__preview.data
         return buf
 
     def write_to_file(self, path):
-        """
-        Write the preview image to a file on disk.
+        """Write the preview image to a file on disk.
+
         The file extension will be automatically appended to the path.
 
-        :param path: path to write the preview to (without an extension)
-        :type path: string
+        Args:
+        path -- path to write the preview to (without an extension)
         """
         return self.__preview.write_to_file(path)
 

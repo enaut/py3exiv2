@@ -7,6 +7,7 @@ docs
 docs/*
 packaging
 packaging/*
+py3exiv2/__init__.py
 py3exiv2/art/
 py3exiv2/build
 py3exiv2/build.sh
