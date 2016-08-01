@@ -3,7 +3,7 @@
 # ******************************************************************************
 #
 # Copyright (C) 2006-2011 Olivier Tilloy <olivier@tilloy.net>
-# Copyright (C) 2015 Vincent Vande Vyvre <vincent.vandevyvre@oqapy.eu>
+# Copyright (C) 2015-2016 Vincent Vande Vyvre <vincent.vandevyvre@oqapy.eu>
 #
 # This file is part of the py3exiv2 distribution.
 #
@@ -20,8 +20,7 @@
 # along with py3exiv2; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, 5th Floor, Boston, MA 02110-1301 USA.
 #
-# Author: Olivier Tilloy <olivier@tilloy.net>
-# Hacking to Python3: Vincent Vande Vyvre <vincent.vandevyvre@oqapy.eu>
+# Maintainer: Vincent Vande Vyvre <vincent.vandevyvre@oqapy.eu>
 #
 # ******************************************************************************
 
@@ -41,28 +40,25 @@ import datetime
 import sys
 
 class ExifValueError(ValueError):
+    """Exception raised when failing to parse the *value* of an EXIF tag.
 
     """
-    Exception raised when failing to parse the *value* of an EXIF tag.
+    def __init__(self, value, type_):
+        """Instanciate the ExifValueError.
 
-    :attribute value: the value that fails to be parsed
-    :type value: string
-    :attribute type: the EXIF type of the tag
-    :type type: string
-    """
-
-    def __init__(self, value, type):
+        Args:
+        value -- the value that fails to be parsed
+        type_ -- the EXIF type of the tag
+        """
         self.value = value
-        self.type = type
+        self.type = type_
 
     def __str__(self):
         return 'Invalid value for EXIF type [%s]: [%s]' %(self.type, self.value)
 
 
 class ExifTag(ListenerInterface):
-
-    """
-    An EXIF tag.
+    """An EXIF tag.
 
     Here is a correspondance table between the EXIF types and the possible
     python types the value of a tag may take:
@@ -76,7 +72,6 @@ class ExifTag(ListenerInterface):
       (Python ≥ 2.6) or :class:`pyexiv2.utils.Rational`      
     - Undefined: string
     """
-
     # According to the EXIF specification, the only accepted format for an Ascii
     # value representing a datetime is '%Y:%m:%d %H:%M:%S', but it seems that
     # others formats can be found in the wild.
@@ -87,15 +82,14 @@ class ExifTag(ListenerInterface):
     _date_formats = ('%Y:%m:%d',)
 
     def __init__(self, key, value=None, _tag=None):
-        """
-        The tag can be initialized with an optional value which expected type
-        depends on the EXIF type of the tag.
+        """ The tag can be initialized with an optional value which expected
+        type depends on the EXIF type of the tag.
 
-        :param key: the key of the tag
-        :type key: string
-        :param value: the value of the tag
+        Args:
+        key -- the key of the tag
+        value -- the value of the tag
         """
-        super(ExifTag, self).__init__()
+        super().__init__()
         if _tag is not None:
             self._tag = _tag
 
@@ -113,7 +107,9 @@ class ExifTag(ListenerInterface):
 
     @staticmethod
     def _from_existing_tag(_tag):
-        # Build a tag from an already existing libexiv2python._ExifTag.
+        """Build a tag from an already existing libexiv2python._ExifTag.
+
+        """
         tag = ExifTag(_tag._getKey(), _tag=_tag)
         # Do not set the raw_value property, as it would call _tag._setRawValue
         # (see https://bugs.launchpad.net/pyexiv2/+bug/582445).
@@ -124,38 +120,52 @@ class ExifTag(ListenerInterface):
     @property
     def key(self):
         """The key of the tag in the dotted form
-        ``familyName.groupName.tagName`` where ``familyName`` = ``exif``."""
+        ``familyName.groupName.tagName`` where ``familyName`` = ``exif``.
+
+        """
         return self._tag._getKey()
 
     @property
     def type(self):
         """The EXIF type of the tag (one of Ascii, Byte, SByte, Comment, Short,
-        SShort, Long, SLong, Rational, SRational, Undefined)."""
+        SShort, Long, SLong, Rational, SRational, Undefined).
+
+        """
         return self._tag._getType()
 
     @property
     def name(self):
-        """The name of the tag (this is also the third part of the key)."""
+        """The name of the tag (this is also the third part of the key).
+
+        """
         return self._tag._getName()
 
     @property
     def label(self):
-        """The title (label) of the tag."""
+        """The title (label) of the tag.
+
+        """
         return self._tag._getLabel()
 
     @property
     def description(self):
-        """The description of the tag."""
+        """The description of the tag.
+
+        """
         return self._tag._getDescription()
 
     @property
     def section_name(self):
-        """The name of the tag's section."""
+        """The name of the tag's section.
+
+        """
         return self._tag._getSectionName()
 
     @property
     def section_description(self):
-        """The description of the tag's section."""
+        """The description of the tag's section.
+
+        """
         return self._tag._getSectionDescription()
 
     def _get_raw_value(self):
@@ -170,7 +180,9 @@ class ExifTag(ListenerInterface):
                          doc='The raw value of the tag as a string.')
 
     def _compute_value(self):
-        # Lazy computation of the value from the raw value.
+        """Lazy computation of the value from the raw value.
+
+        """
         if self.type in ('Short', 'SShort', 'Long', 'SLong', 
                          'Rational', 'SRational'):
             # May contain multiple values
@@ -224,7 +236,9 @@ class ExifTag(ListenerInterface):
     @property
     def human_value(self):
         """A (read-only) human-readable representation
-        of the value of the tag."""
+        of the value of the tag.
+
+        """
         return self._tag._getHumanValue() or None
 
     def contents_changed(self):
