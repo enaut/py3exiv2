@@ -3,6 +3,7 @@ Cyrillic.jpg
 Hebrew.jpg
 main.py
 pickling.py
+test_py2.py
 docs
 docs/*
 packaging
@@ -16,3 +17,5 @@ py3exiv2/src/DSCF0006.JPG
 py3exiv2/test/script.py
 samples
 samples/*
+rpmbuild-py3exiv2
+rpmbuild-py3exiv2/*
