@@ -46,7 +46,6 @@ namespace exiv2wrapper
 
 void Image::_instantiate_image()
 {
-    std::cout << "Instanciate the image\n";
     _exifThumbnail = 0;
 
     // If an exception is thrown, it has to be done outside of the
