@@ -49,9 +49,7 @@ from pyexiv2.preview import Preview
 
 
 class ImageMetadata(MutableMapping):
-
-    """
-    A container for all the metadata embedded in an image.
+    """A container for all the metadata embedded in an image.
 
     It provides convenient methods for the manipulation of EXIF, IPTC and XMP
     metadata embedded in image files such as JPEG and TIFF files, using Python
