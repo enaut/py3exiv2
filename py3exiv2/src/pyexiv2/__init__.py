@@ -20,8 +20,7 @@
 # along with py3exiv2; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, 5th Floor, Boston, MA 02110-1301 USA.
 #
-# Author: Olivier Tilloy <olivier@tilloy.net>
-# Hacking to Python3: Vincent Vande Vyvre <vincent.vandevyvre@oqapy.eu>
+# Maintainer: Vincent Vande Vyvre <vincent.vandevyvre@oqapy.eu>
 #
 # ******************************************************************************
 
@@ -76,7 +75,7 @@ def _make_version(version_info):
 
 
 #: A tuple containing the three components of the version number: major, minor, micro.
-version_info = (0, 1, 0)
+version_info = (0, 1, 1)
 
 #: The version of the module as a string (major.minor.micro).
 __version__ = _make_version(version_info)
