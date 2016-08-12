@@ -29,7 +29,7 @@ Python 2 under the name `pyexiv2 <http://tilloy.net/dev/pyexiv2/index.html>`_.
 The module's name and the syntax are unchanged, your code written previously for Python 2 may run with py3exiv2, however there's three thinks that you should be care.
 
    * The deprecated ``IptcTag.raw_values`` was removed in py3exiv2, use ``IptcTag.raw_value`` instead.
-   * The ``pyexiv2.exif.ExifThumbnail.data`` and ``pyexiv2.preview.Preview.data`` are not yet implemented.
+   * The ``pyexiv2.preview.Preview.data`` is not implemented, use ``pyexiv2.exif.ExifThumbnail.data`` instead.
    * All the string returned by any ``Tag.value`` are unicode, but you don't need to convert yours strings in bytes to set a value for a tag which only accept ASCII characters, this is the job of py3exiv2.
 
 

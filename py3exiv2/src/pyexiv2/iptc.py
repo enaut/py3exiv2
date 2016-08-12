@@ -60,9 +60,7 @@ class IptcValueError(ValueError):
 
 
 class IptcTag(ListenerInterface):
-
-    """
-    An IPTC tag.
+    """An IPTC tag.
 
     This tag can have several values (tags that have the *repeatable* property).
 
@@ -75,26 +73,25 @@ class IptcTag(ListenerInterface):
     - Time: :class:`datetime.time`
     - Undefined: string
     """
-
     # strptime is not flexible enough to handle all valid Time formats, we use a
     # custom regular expression
     _time_zone_re = r'(?P<sign>\+|-)(?P<ohours>\d{2}):(?P<ominutes>\d{2})'
     _time_re = re.compile(r'(?P<hours>\d{2}):(?P<minutes>\d{2}):(?P<seconds>\d{2})(?P<tzd>%s)' % _time_zone_re)
-
     def __init__(self, key, values=None, _tag=None):
-        """
-        The tag can be initialized with an optional list of values which
+        """The tag can be initialized with an optional list of values which
         expected type depends on the IPTC type of the tag.
 
-        :param key: the key of the tag
-        :type key: string
-        :param values: the values of the tag
+        Args:
+        key -- the key of the tag
+        values -- the values of the tag
         """
         super(IptcTag, self).__init__()
         if _tag is not None:
             self._tag = _tag
+
         else:
             self._tag = libexiv2python._IptcTag(key)
+
         self._raw_values = None
         self._values = None
         self._values_cookie = False
@@ -118,48 +115,66 @@ class IptcTag(ListenerInterface):
     @property
     def key(self):
         """The key of the tag in the dotted form
-        ``familyName.groupName.tagName`` where ``familyName`` = ``iptc``."""
+        ``familyName.groupName.tagName`` where ``familyName`` = ``iptc``.
+
+        """
         return self._tag._getKey()
 
     @property
     def type(self):
         """The IPTC type of the tag (one of Short, String, Date, Time,
-        Undefined)."""
+        Undefined).
+
+        """
         return self._tag._getType()
 
     @property
     def name(self):
-        """The name of the tag (this is also the third part of the key)."""
+        """The name of the tag (this is also the third part of the key).
+
+        """
         return self._tag._getName()
 
     @property
     def title(self):
-        """The title (label) of the tag."""
+        """The title (label) of the tag.
+
+        """
         return self._tag._getTitle()
 
     @property
     def description(self):
-        """The description of the tag."""
+        """The description of the tag.
+
+        """
         return self._tag._getDescription()
 
     @property
     def photoshop_name(self):
-        """The Photoshop name of the tag."""
+        """The Photoshop name of the tag.
+
+        """
         return self._tag._getPhotoshopName()
 
     @property
     def repeatable(self):
-        """Whether the tag is repeatable (accepts several values)."""
+        """Whether the tag is repeatable (accepts several values).
+
+        """
         return self._tag._isRepeatable()
 
     @property
     def record_name(self):
-        """The name of the tag's record."""
+        """The name of the tag's record.
+
+        """
         return self._tag._getRecordName()
 
     @property
     def record_description(self):
-        """The description of the tag's record."""
+        """The description of the tag's record.
+
+        """
         return self._tag._getRecordDescription()
 
     def _get_raw_values(self):
@@ -168,6 +183,7 @@ class IptcTag(ListenerInterface):
     def _set_raw_values(self, values):
         if not isinstance(values, (list, tuple)):
             raise TypeError('Expecting a list of values')
+
         self._tag._setRawValues(values)
         self._raw_values = values
         self._values_cookie = True
@@ -185,6 +201,7 @@ class IptcTag(ListenerInterface):
     def _get_values(self):
         if self._values_cookie:
             self._compute_values()
+
         return self._values
 
     def _set_values(self, values):
@@ -199,6 +216,7 @@ class IptcTag(ListenerInterface):
         if isinstance(values, NotifyingList):
             # Already a notifying list
             self._values = values
+
         else:
             # Make the values a notifying list 
             self._values = NotifyingList(values)
@@ -217,15 +235,14 @@ class IptcTag(ListenerInterface):
         self._set_values(self._values)
 
     def _convert_to_python(self, value):
-        """
-        Convert one raw value to its corresponding python type.
+        """Convert one raw value to its corresponding python type.
 
-        :param value: the raw value to be converted
-        :type value: string
+        Args:
+        value -- the raw value to be converted
 
-        :return: the value converted to its corresponding python type
+        Return: the value converted to its corresponding python type
 
-        :raise IptcValueError: if the conversion fails
+        Raise IptcValueError: if the conversion fails
         """
         if self.type == 'Short':
             try:
@@ -265,12 +282,14 @@ class IptcTag(ListenerInterface):
             match = IptcTag._time_re.match(value)
             if match is None:
                 raise IptcValueError(value, self.type)
+
             gd = match.groupdict()
             try:
                 tzinfo = FixedOffset(gd['sign'], int(gd['ohours']),
                                      int(gd['ominutes']))
             except TypeError:
                 raise IptcValueError(value, self.type)
+
             try:
                 return datetime.time(int(gd['hours']), int(gd['minutes']),
                                      int(gd['seconds']), tzinfo=tzinfo)
@@ -284,20 +303,20 @@ class IptcTag(ListenerInterface):
         raise IptcValueError(value, self.type)
 
     def _convert_to_string(self, value):
-        """
-        Convert one value to its corresponding string representation, suitable
-        to pass to libexiv2.
+        """Convert one value to its corresponding string representation,
+        suitable to pass to libexiv2.
 
-        :param value: the value to be converted
+        Args:
+        value -- the value to be converted
 
-        :return: the value converted to its corresponding string representation
-        :rtype: string
+        Return: the value converted to its corresponding string representation
 
-        :raise IptcValueError: if the conversion fails
+        Raise IptcValueError: if the conversion fails
         """
         if self.type == 'Short':
             if isinstance(value, int):
                 return str(value)
+
             else:
                 raise IptcValueError(value, self.type)
 
@@ -310,39 +329,44 @@ class IptcTag(ListenerInterface):
 
             elif isinstance(value, bytes):
                 return value
+
             else:
                 raise IptcValueError(value, self.type)
 
         elif self.type == 'Date':
             if isinstance(value, (datetime.date, datetime.datetime)):
                 return DateTimeFormatter.iptc_date(value)
+
             else:
                 raise IptcValueError(value, self.type)
 
         elif self.type == 'Time':
             if isinstance(value, (datetime.time, datetime.datetime)):
                 return DateTimeFormatter.iptc_time(value)
+
             else:
                 raise IptcValueError(value, self.type)
 
         elif self.type == 'Undefined':
             if isinstance(value, str):
                 return value
+
             else:
                 raise IptcValueError(value, self.type)
 
         raise IptcValueError(value, self.type)
 
     def __str__(self):
-        """
-        :return: a string representation of the IPTC tag for debugging purposes
-        :rtype: string
+        """Return a string representation of the IPTC tag for debugging purposes
+
         """
         left = '%s [%s]' % (self.key, self.type)
         if self._raw_values is None:
             right = '(No values)'
+
         else:
              right = self._raw_values
+
         return '<%s = %s>' % (left, right)
 
     # Support for pickling.

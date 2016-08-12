@@ -576,7 +576,6 @@ class ExifThumbnail(object):
         self._update_exif_tags_cache()
 
     def _get_data(self):
-
         buf_ = self._metadata._image._getExifThumbnailData()
         return buf_
 
