@@ -408,6 +408,7 @@ class ImageMetadata(MutableMapping):
         family = key.split('.')[0].lower()
         if family in ('exif', 'iptc', 'xmp'):
             return getattr(self, '_delete_%s_tag' % family)(key)
+
         else:
             raise KeyError(key)
 
@@ -477,10 +478,10 @@ class ImageMetadata(MutableMapping):
     @property
     def buffer(self):
         """The image buffer as a string.
-        If metadata has been modified, the data won't be up-to-date until
-        :meth:`.write` has been called.
+
         """
-        return self._image._getDataBuffer()
+        #XXX Deprecated
+        return
 
     @property
     def exif_thumbnail(self):
