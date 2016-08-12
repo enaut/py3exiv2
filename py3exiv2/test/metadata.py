@@ -3,7 +3,7 @@
 # ******************************************************************************
 #
 # Copyright (C) 2009-2011 Olivier Tilloy <olivier@tilloy.net>
-# Copyright (C) 2015 Vincent Vande Vyvre <vincent.vandevyvre@oqapy.eu>
+# Copyright (C) 2015-2016 Vincent Vande Vyvre <vincent.vandevyvre@oqapy.eu>
 #
 # This file is part of the pyexiv2 distribution.
 #
@@ -21,8 +21,7 @@
 # along with pyexiv2; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, 5th Floor, Boston, MA 02110-1301 USA.
 #
-# Author: Olivier Tilloy <olivier@tilloy.net>
-# Hacking to Python3: Vincent Vande Vyvre <vincent.vandevyvre@oqapy.eu>
+# Maintainer: Vincent Vande Vyvre <vincent.vandevyvre@oqapy.eu>
 #
 # ******************************************************************************
 
@@ -38,6 +37,8 @@ import tempfile
 import time
 import unittest
 from testutils import EMPTY_JPG_DATA
+
+from pyexiv2 import metadata
 
 
 class TestImageMetadata(unittest.TestCase):
@@ -90,7 +91,6 @@ class TestImageMetadata(unittest.TestCase):
         self.assertRaises(IOError, getattr, self.metadata, 'previews')
         other = ImageMetadata(self.pathname)
         self.assertRaises(IOError, self.metadata.copy, other)
-        self.assertRaises(IOError, getattr, self.metadata, 'buffer')
         thumb = self.metadata.exif_thumbnail
         self.assertRaises(IOError, getattr, thumb, 'mime_type')
         self.assertRaises(IOError, getattr, thumb, 'extension')
@@ -784,7 +784,6 @@ class TestImageMetadata(unittest.TestCase):
         preview = self.metadata.previews[0]
         self.assertEqual(thumb.mime_type, preview.mime_type)
         self.assertEqual(thumb.extension, preview.extension)
-        self.assertEqual(thumb.data, preview.data)
 
     #########################
     # Test the IPTC charset #

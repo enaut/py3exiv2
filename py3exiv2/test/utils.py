@@ -3,6 +3,7 @@
 # ******************************************************************************
 #
 # Copyright (C) 2010-2012 Olivier Tilloy <olivier@tilloy.net>
+# Copyright (C) 2015-2016 Vincent Vande Vyvre <vincent.vandevyvre@oqapy.eu>
 #
 # This file is part of the pyexiv2 distribution.
 #
@@ -20,7 +21,7 @@
 # along with pyexiv2; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, 5th Floor, Boston, MA 02110-1301 USA.
 #
-# Author: Olivier Tilloy <olivier@tilloy.net>
+# Maintainer: Vincent Vande Vyvre <vincent.vandevyvre@oqapy.eu>
 #
 # ******************************************************************************
 

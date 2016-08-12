@@ -294,11 +294,11 @@ class XmpTag(object):
             else:
                 raise XmpValueError(value, type_)
 
-        elif type_== 'Colorant':
+        elif type_ == 'Colorant':
             # TODO
             raise NotImplementedError('XMP conversion for type [%s]' % type_)
 
-        elif type_== 'Date':
+        elif type_ == 'Date':
             match = self._date_re.match(value)
             if match is None:
                 raise XmpValueError(value, type_)
@@ -353,32 +353,32 @@ class XmpTag(object):
                 except ValueError:
                     raise XmpValueError(value, type_)
 
-        elif type_== 'Dimensions':
+        elif type_ == 'Dimensions':
             # TODO
             raise NotImplementedError('XMP conversion for type [%s]' % type_)
 
-        elif type_== 'Font':
+        elif type_ == 'Font':
             # TODO
             raise NotImplementedError('XMP conversion for type [%s]' % type_)
 
-        elif type_== 'GPSCoordinate':
+        elif type_ == 'GPSCoordinate':
             try:
                 return GPSCoordinate.from_string(value)
             except ValueError:
                 raise XmpValueError(value, type_)
 
-        elif type_== 'Integer':
+        elif type_ == 'Integer':
             try:
                 return int(value)
             except ValueError:
                 raise XmpValueError(value, type_)
 
-        elif type_== 'Locale':
+        elif type_ == 'Locale':
             # TODO
             # See RFC 3066
             raise NotImplementedError('XMP conversion for type [%s]' % type_)
 
-        elif type_== 'MIMEType':
+        elif type_ == 'MIMEType':
             if value.count('/') != 1:
                 raise XmpValueError(value, type_)
             try:
@@ -386,17 +386,17 @@ class XmpTag(object):
             except ValueError:
                 raise XmpValueError(value, type_)
 
-        elif type_== 'Rational':
+        elif type_ == 'Rational':
             try:
                 return make_fraction(value)
             except (ValueError, ZeroDivisionError):
                 raise XmpValueError(value, type_)
 
-        elif type_== 'Real':
+        elif type_ == 'Real':
             # TODO
             raise NotImplementedError('XMP conversion for type [%s]' % type_)
 
-        elif type_in ('AgentName', 'ProperName', 'Text'):
+        elif type_ in ('AgentName', 'ProperName', 'Text'):
             if isinstance(value, bytes):
                 try:
                     value = str(value, 'utf-8')
@@ -404,11 +404,11 @@ class XmpTag(object):
                     raise XmpValueError(value, type_)
             return value
 
-        elif type_== 'Thumbnail':
+        elif type_ == 'Thumbnail':
             # TODO
             raise NotImplementedError('XMP conversion for type [%s]' % type_)
 
-        elif type_in ('URI', 'URL'):
+        elif type_ in ('URI', 'URL'):
             if isinstance(value, bytes):
                 try:
                     value = value.decode('utf-8')
@@ -417,7 +417,7 @@ class XmpTag(object):
                     pass
             return value
 
-        elif type_== 'XPath':
+        elif type_ == 'XPath':
             # TODO
             raise NotImplementedError('XMP conversion for type [%s]' % type_)
 

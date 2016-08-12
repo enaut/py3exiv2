@@ -21,8 +21,7 @@
 # along with pyexiv2; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, 5th Floor, Boston, MA 02110-1301 USA.
 #
-# Author: Olivier Tilloy <olivier@tilloy.net>
-# Hacking to Python3: Vincent Vande Vyvre <vincent.vandevyvre@oqapy.eu>
+# Maintainer: Vincent Vande Vyvre <vincent.vandevyvre@oqapy.eu>
 #
 # ******************************************************************************
 
