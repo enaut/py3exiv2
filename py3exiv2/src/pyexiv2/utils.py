@@ -34,46 +34,35 @@ import re
 from fractions import Fraction
 
 class FixedOffset(datetime.tzinfo):
+    """Define a fixed positive or negative offset of a local time from UTC.
 
-    """
-    Fixed positive or negative offset from a local time east from UTC.
-
-    :attribute sign: the sign of the offset ('+' or '-')
-    :type sign: string
-    :attribute hours: the absolute number of hours of the offset
-    :type hours: int
-    :attribute minutes: the absolute number of minutes of the offset
-    :type minutes: int
     """
 
     def __init__(self, sign='+', hours=0, minutes=0):
-        """
-        Initialize an offset from a sign ('+' or '-') and an absolute value
+        """Initialize an offset from a sign ('+' or '-') and an absolute value
         expressed in hours and minutes.
+
         No check on the validity of those values is performed, it is the
         responsibility of the caller to pass valid values.
 
-        :param sign: the sign of the offset ('+' or '-')
-        :type sign: string
-        :param hours: an absolute number of hours
-        :type hours: int
-        :param minutes: an absolute number of minutes
-        :type minutes: int
+        Args:
+        sign -- the sign of the offset ('+' or '-')
+        hours -- an absolute number of hours
+        minutes -- an absolute number of minutes
         """
         self.sign = sign
         self.hours = hours
         self.minutes = minutes
 
     def utcoffset(self, dt):
-        """
-        Return offset of local time from UTC, in minutes east of UTC.
+        """Return offset of local time from UTC, in minutes east of UTC.
+
         If local time is west of UTC, this value will be negative.
 
-        :param dt: the local time
-        :type dt: :class:`datetime.time`
+        Args:
+        dt -- the local datetime.time instance
 
-        :return: a whole number of minutes in the range -1439 to 1439 inclusive
-        :rtype: :class:`datetime.timedelta`
+        Return: a whole number of minutes in the range -1439 to 1439 inclusive
         """
         total = self.hours * 60 + self.minutes
         if self.sign == '-':
@@ -81,28 +70,26 @@ class FixedOffset(datetime.tzinfo):
         return datetime.timedelta(minutes = total)
 
     def dst(self, dt):
-        """
-        Return the daylight saving time (DST) adjustment.
+        """Return the daylight saving time (DST) adjustment.
+
         In this implementation, it is always nil.
 
-        :param dt: the local time
-        :type dt: :class:`datetime.time`
+        Args:
+        dt -- the local datetime.time instance
 
-        :return: the DST adjustment (always nil)
-        :rtype: :class:`datetime.timedelta`
+        Return: the DST adjustment (always nil)
         """
         return datetime.timedelta(0)
 
     def tzname(self, dt):
-        """
-        Return a string representation of the offset in the format '±%H:%M'.
+        """Return a string representation of the offset in the format '±%H:%M'.
+
         If the offset is nil, the representation is, by convention, 'Z'.
 
-        :param dt: the local time
-        :type dt: :class:`datetime.time`
+        Args:
+        dt -- the local datetime.time instance
 
-        :return: a human-readable representation of the offset
-        :rtype: string
+        Return: a human-readable representation of the offset
         """
         if self.hours == 0 and self.minutes == 0:
             return 'Z'
@@ -110,32 +97,29 @@ class FixedOffset(datetime.tzinfo):
             return '%s%02d:%02d' % (self.sign, self.hours, self.minutes)
 
     def __equal__(self, other):
-        """
-        Test equality between this offset and another offset.
+        """Test equality between this offset and another offset.
 
-        :param other: another offset
-        :type other: :class:`FixedOffset`
+        Args:
+        other -- another FixedOffset instance
 
-        :return: True if the offset are equal, False otherwise
-        :rtype: boolean
+        Return: True if the offset are equal, False otherwise
         """
         return (self.sign == other.sign) and (self.hours == other.hours) and \
             (self.minutes == other.minutes)
 
 
 def undefined_to_string(undefined):
-    """
-    Convert an undefined string into its corresponding sequence of bytes.
+    """Convert an undefined string into its corresponding sequence of bytes.
+
     The undefined string must contain the ascii codes of a sequence of bytes,
     separated by white spaces (e.g. "48 50 50 49" will be converted into
     "0221").
     The Undefined type is part of the EXIF specification.
 
-    :param undefined: an undefined string
-    :type undefined: string
+    Args:
+    undefined -- an undefined string
 
-    :return: the corresponding decoded string
-    :rtype: string
+    Return: the corresponding decoded string
     """
     if not undefined:
         return ''
@@ -144,39 +128,36 @@ def undefined_to_string(undefined):
 
 
 def string_to_undefined(sequence):
-    """
-    Convert a string into its undefined form.
+    """Convert a string into its undefined form.
+
     The undefined form contains a sequence of ascii codes separated by white
     spaces (e.g. "0221" will be converted into "48 50 50 49").
     The Undefined type is part of the EXIF specification.
 
-    :param sequence: a sequence of bytes
-    :type sequence: string
+    Args:
+    sequence -- a sequence of bytes
 
-    :return: the corresponding undefined string
-    :rtype: string
+    Return: the corresponding undefined string
     """
     return " ".join([str(ord(s)) for s in sequence])
 
 def is_fraction(obj):
-    """
-    Test whether the object is a valid fraction.
+    """Test whether the object is a valid fraction.
+
     """
     return isinstance(obj, Fraction)
 
 def match_string(string):
-    """
-    Match a string against the expected format for a :class:`Fraction`
+    """Match a string against the expected format for a :class:`Fraction`
     (``[-]numerator/denominator``) and return the numerator and denominator
     as a tuple.
 
-    :param string: a string representation of a rational number
-    :type string: string
+    Args: 
+    string -- a string representation of a rational number
 
-    :return: a tuple (numerator, denominator)
-    :rtype: tuple of long
+    Return: a tuple (numerator, denominator)
 
-    :raise ValueError: if the format of the string is invalid
+    Raise ValueError: if the format of the string is invalid
     """
     format_re = re.compile(r'(?P<numerator>-?\d+)/(?P<denominator>\d+)')
     match = format_re.match(string)
@@ -187,10 +168,9 @@ def match_string(string):
     return (int(gd['numerator']), int(gd['denominator']))
 
 def make_fraction(*args):
-    """
-    Make a fraction.
+    """Make a fraction.
 
-    :raise TypeError: if the arguments do not match the expected format for a
+    Raise TypeError: if the arguments do not match the expected format for a
                       fraction
     """
     if len(args) == 1:
@@ -213,12 +193,11 @@ def make_fraction(*args):
 
 
 def fraction_to_string(fraction):
-    """
-    Return a string representation of a fraction, suitable to pass to libexiv2.
+    """Return a string representation of a fraction.
 
     The returned string is always in the form '[numerator]/[denominator]'.
 
-    :raise TypeError: if the argument is not a valid fraction
+    Raise TypeError: if the argument is not a valid fraction
     """
     if isinstance(fraction, Fraction):
         # fractions.Fraction.__str__ returns '0' for a null numerator.
@@ -244,12 +223,11 @@ class ListenerInterface(object):
 
 
 class NotifyingList(list):
+    """A simplistic implementation of a notifying list.
 
-    """
-    A simplistic implementation of a notifying list.
     Any changes to the list are notified in a synchronous way to all previously
-    registered listeners. A listener must implement the
-    :class:`ListenerInterface`.
+    registered listeners. 
+    A listener must implement the class ListenerInterface.
     """
 
     # Useful documentation:
@@ -261,22 +239,20 @@ class NotifyingList(list):
         self._listeners = set()
 
     def register_listener(self, listener):
-        """
-        Register a new listener to be notified of changes.
+        """Register a new listener to be notified of changes.
 
-        :param listener: any object that listens for changes
-        :type listener: :class:`ListenerInterface`
+        Args:
+        listener -- any ListenerInterface instance that listens for changes
         """
         self._listeners.add(listener)
 
     def unregister_listener(self, listener):
-        """
-        Unregister a previously registered listener.
+        """Unregister a previously registered listener.
 
-        :param listener: a previously registered listener
-        :type listener: :class:`ListenerInterface`
+        Args:
+        listener -- a previously registered listener
 
-        :raise KeyError: if the listener was not previously registered
+        Raise KeyError: if the listener was not previously registered
         """
         self._listeners.remove(listener)
 
@@ -350,106 +326,112 @@ class NotifyingList(list):
 
 
 class GPSCoordinate(object):
-
-    """
-    A class representing GPS coordinates (e.g. a latitude or a longitude).
+    """A class representing GPS coordinates (e.g. a latitude or a longitude).
 
     Its attributes (degrees, minutes, seconds, direction) are read-only
     properties.
     """
-
     _format_re = re.compile(r'(?P<degrees>-?\d+),'
                     '(?P<minutes>\d+)(,(?P<seconds>\d+)|\.(?P<fraction>\d+))'
                     '(?P<direction>[NSEW])')
 
     def __init__(self, degrees, minutes, seconds, direction):
-        """
-        :param degrees: degrees
-        :type degrees: int
-        :param minutes: minutes
-        :type minutes: int
-        :param seconds: seconds
-        :type seconds: int
-        :param direction: direction ('N', 'S', 'E' or 'W')
-        :type direction: string
+        """Instanciate a GPSCoordinate object.
 
-        :raise ValueError: if any of the parameter is not in the expected range
+        Args:
+        degrees -- int(degrees)
+        minutes -- int(minutes)
+        seconds -- int(seconds)
+        direction -- str('N', 'S', 'E' or 'W')
+
+        Raise ValueError: if any of the parameter is not in the expected range
                            of values
         """
         if direction not in ('N', 'S', 'E', 'W'):
             raise ValueError('Invalid direction: %s' % direction)
+
         self._direction = direction
         if (direction in ('N', 'S') and (degrees < 0 or degrees > 90)) or \
            (direction in ('E', 'W') and (degrees < 0 or degrees > 180)):
             raise ValueError('Invalid value for degrees: %d' % degrees)
+
         self._degrees = degrees
         if minutes < 0 or minutes > 60:
             raise ValueError('Invalid value for minutes: %d' % minutes)
+
         self._minutes = minutes
         if seconds < 0 or seconds > 60:
             raise ValueError('Invalid value for seconds: %d' % seconds)
+
         self._seconds = seconds
 
     @property
     def degrees(self):
-        """The degrees component of the coordinate."""
+        """The degrees component of the coordinate.
+
+        """
         return self._degrees
 
     @property
     def minutes(self):
-        """The minutes component of the coordinate."""
+        """The minutes component of the coordinate.
+
+        """
         return self._minutes
 
     @property
     def seconds(self):
-        """The seconds component of the coordinate."""
+        """The seconds component of the coordinate.
+
+        """
         return self._seconds
 
     @property
     def direction(self):
-        """The direction component of the coordinate."""
+        """The direction component of the coordinate.
+
+        """
         return self._direction
 
     @staticmethod
     def from_string(string):
-        """
-        Instantiate a :class:`GPSCoordinate` from a string formatted as
+        """Instantiate a :class:`GPSCoordinate` from a string formatted as
         ``DDD,MM,SSk`` or ``DDD,MM.mmk`` where ``DDD`` is a number of degrees,
         ``MM`` is a number of minutes, ``SS`` is a number of seconds, ``mm`` is
         a fraction of minutes, and ``k`` is a single character N, S, E, W
         indicating a direction (north, south, east, west).
 
-        :param string: a string representation of a GPS coordinate
-        :type string: string
+        Args:
+        string -- a string representation of a GPS coordinate
 
-        :return: the GPS coordinate parsed
-        :rtype: :class:`GPSCoordinate`
+        Return: the GPSCoordinate parsed
 
-        :raise ValueError: if the format of the string is invalid
+        Raise ValueError: if the format of the string is invalid
         """
         match = GPSCoordinate._format_re.match(string)
         if match is None:
             raise ValueError('Invalid format for a GPS coordinate: %s' % string)
+
         gd = match.groupdict()
         fraction = gd['fraction']
         if fraction is not None:
             seconds = int(round(int(fraction[:2]) * 0.6))
+
         else:
             seconds = int(gd['seconds'])
+
         return GPSCoordinate(int(gd['degrees']), int(gd['minutes']), seconds,
                              gd['direction'])
 
     def __eq__(self, other):
-        """
-        Compare two GPS coordinates for equality.
+        """Compare two GPS coordinates for equality.
 
         Two coordinates are equal if and only if all their components are equal.
 
-        :param other: the GPS coordinate to compare to self for equality
-        :type other: :class:`GPSCoordinate`
+        Args:
+        other -- the GPSCoordinate instance to compare to self for equality
 
-        :return: True if equal, False otherwise
-        :rtype: boolean
+        Return: True if equal, False otherwise
         """
         return (self._degrees == other._degrees) and \
                (self._minutes == other._minutes) and \
@@ -457,19 +439,16 @@ class GPSCoordinate(object):
                (self._direction == other._direction)
 
     def __str__(self):
-        """
-        :return: a string representation of the GPS coordinate conforming to the
-                 XMP specification
-        :rtype: string
+        """Return a string representation of the GPS coordinate conforming
+        to the XMP specification
+
         """
         return '%d,%d,%d%s' % (self._degrees, self._minutes, self._seconds,
                                self._direction)
 
 
 class DateTimeFormatter(object):
-
-    """
-    Convenience object that exposes static methods to convert a date, time or
+    """Convenience object that exposes static methods to convert a date, time or
     datetime object to a string representation suitable for various metadata
     standards.
 
@@ -483,15 +462,12 @@ class DateTimeFormatter(object):
 
     @staticmethod
     def timedelta_to_offset(t):
-        """
-        Convert a time delta to a string representation in the form ``±%H:%M``.
+        """Convert a time delta to a string..
 
-        :param t: a time delta
-        :type t: :class:`datetime.timedelta`
+        Args:
+        t -- a datetime.timedelta instance
 
-        :return: a string representation of the time delta in the form
-                 ``±%H:%M``
-        :rtype: string
+        Return: a string representation of the time delta in the form `±%H:%M`
         """
         # timedelta.total_seconds() is only available starting with Python 3.2
         seconds = t.total_seconds()
@@ -501,40 +477,38 @@ class DateTimeFormatter(object):
 
     @staticmethod
     def exif(d):
-        """
-        Convert a date/time object to a string representation conforming to
+        """Convert a date/time object to a string representation conforming to
         libexiv2’s internal representation for the EXIF standard.
 
-        :param d: a datetime or date object
-        :type d: :class:`datetime.datetime` or :class:`datetime.date`
+        Args:
+        d -- a datetime.datetime or datetime.date instance
 
-        :return: a string representation conforming to the EXIF standard
-        :rtype: string
+        Return: a string representation conforming to the EXIF standard
 
-        :raise TypeError: if the parameter is not a datetime or a date object
+        Raise TypeError: if the parameter is not a datetime or a date object
         """
         if isinstance(d, datetime.datetime):
             return '%04d:%02d:%02d %02d:%02d:%02d' % \
                 (d.year, d.month, d.day, d.hour, d.minute, d.second)
+
         elif isinstance(d, datetime.date):
             return '%04d:%02d:%02d' % (d.year, d.month, d.day)
+
         else:
             raise TypeError('expecting an object of type '
                             'datetime.datetime or datetime.date')
 
     @staticmethod
     def iptc_date(d):
-        """
-        Convert a date object to a string representation conforming to
+        """Convert a date object to a string representation conforming to
         libexiv2’s internal representation for the IPTC standard.
 
-        :param d: a datetime or date object
-        :type d: :class:`datetime.datetime` or :class:`datetime.date`
+        Args:
+        d -- a datetime.datetime or datetime.date instance
 
-        :return: a string representation conforming to the IPTC standard
-        :rtype: string
+        Return: a string representation conforming to the IPTC standard
 
-        :raise TypeError: if the parameter is not a datetime or a date object
+        Raise TypeError: if the parameter is not a datetime or a date object
         """
         if isinstance(d, (datetime.date, datetime.datetime)):
             # ISO 8601 date format.
@@ -543,23 +517,22 @@ class DateTimeFormatter(object):
             # expected by exiv2's DateValue::read(string) should be
             # formatted using pattern '%Y-%m-%d'.
             return '%04d-%02d-%02d' % (d.year, d.month, d.day)
+
         else:
             raise TypeError('expecting an object of type '
                             'datetime.datetime or datetime.date')
 
     @staticmethod
     def iptc_time(d):
-        """
-        Convert a time object to a string representation conforming to
+        """Convert a time object to a string representation conforming to
         libexiv2’s internal representation for the IPTC standard.
 
-        :param d: a datetime or time object
-        :type d: :class:`datetime.datetime` or :class:`datetime.time`
+        Args:
+        d -- a datetime.datetime or time instance
 
-        :return: a string representation conforming to the IPTC standard
-        :rtype: string
+        Return: a string representation conforming to the IPTC standard
 
-        :raise TypeError: if the parameter is not a datetime or a time object
+        Raise TypeError: if the parameter is not a datetime or a time object
         """
         if isinstance(d, (datetime.time, datetime.datetime)):
             # According to the IPTC specification, the format for a string
@@ -571,51 +544,59 @@ class DateTimeFormatter(object):
                 t = d.utcoffset()
                 if t is not None:
                     r += DateTimeFormatter.timedelta_to_offset(t)
+
             else:
                 r += '+00:00'
+
             return r
+
         else:
             raise TypeError('expecting an object of type '
                             'datetime.datetime or datetime.time')
 
     @staticmethod
     def xmp(d):
-        """
-        Convert a date/time object to a string representation conforming to
+        """Convert a date/time object to a string representation conforming to
         libexiv2’s internal representation for the XMP standard.
 
-        :param d: a datetime or date object
-        :type d: :class:`datetime.datetime` or :class:`datetime.date`
+        Args:
+        d -- a datetime.datetime or datetime.date instance
 
-        :return: a string representation conforming to the XMP standard
-        :rtype: string
+        Return: a string representation conforming to the XMP standard
 
-        :raise TypeError: if the parameter is not a datetime or a date object
+        Raise TypeError: if the parameter is not a datetime or a date object
         """
         if isinstance(d, datetime.datetime):
             t = d.utcoffset()
             if d.tzinfo is None or t is None or t == datetime.timedelta(0):
                 tz = 'Z'
+
             else:
                 tz = DateTimeFormatter.timedelta_to_offset(t)
+
             if d.hour == 0 and d.minute == 0 and \
                 d.second == 0 and d.microsecond == 0 and \
                 (d.tzinfo is None or d.utcoffset() == datetime.timedelta(0)):
                 return '%04d-%02d-%02d' % (d.year, d.month, d.day)
+
             elif d.second == 0 and d.microsecond == 0:
                 return '%04d-%02d-%02dT%02d:%02d%s' % \
                     (d.year, d.month, d.day, d.hour, d.minute, tz)
+
             elif d.microsecond == 0:
                 return '%04d-%02d-%02dT%02d:%02d:%02d%s' % \
                     (d.year, d.month, d.day, d.hour, d.minute, d.second, tz)
+
             else:
                 r = '%04d-%02d-%02dT%02d:%02d:%02d.' % \
                     (d.year, d.month, d.day, d.hour, d.minute, d.second)
                 r += str(int(d.microsecond) / 1E6)[2:]
                 r += tz
                 return r
+
         elif isinstance(d, datetime.date):
             return '%04d-%02d-%02d' % (d.year, d.month, d.day)
+
         else:
             raise TypeError('expecting an object of type '
                             'datetime.datetime or datetime.date')
