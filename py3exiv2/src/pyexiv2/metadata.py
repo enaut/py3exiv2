@@ -415,7 +415,7 @@ class ImageMetadata(MutableMapping):
         return chain(self.exif_keys, self.iptc_keys, self.xmp_keys)
 
     def __len__(self):
-        return len( [ x for x in self ] )
+        return len([x for x in self])
 
     def _get_comment(self):
         return self._image._getComment()

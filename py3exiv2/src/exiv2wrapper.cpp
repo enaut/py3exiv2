@@ -484,43 +484,17 @@ void Image::writeExifThumbnailToFile(const std::string& path)
     _getExifThumbnail()->writeFile(path);
 }
 
-boost::python::object Image::getExifThumbnailData()
+boost::python::list Image::getExifThumbnailData()
 {
-    std::cout << "get data thumbnail ...\n";
-    //std::string st = "By-passed!";
-    //return st;
     Exiv2::DataBuf buffer = _getExifThumbnail()->copy();
-    Py_ssize_t size = buffer.size_;
-    Py_buffer py_buffer;
-    PyObject exporter;
-    int res = PyBuffer_FillInfo(&py_buffer, &exporter, &buffer.pData_, 
-                                size, true, PyBUF_CONTIG_RO);
-    if (res == -1) {
-        PyErr_Print();
-        exit(EXIT_FAILURE);
+    // Copy the data buffer in a list.
+    boost::python::list data;
+    for(unsigned int i = 0; i < buffer.size_; ++i)
+    {
+        unsigned int datum = buffer.pData_[i];
+        data.append(datum);
     }
-    boost::python::object memoryView(boost::python::handle<>
-                                    (PyMemoryView_FromObject
-                                    (&exporter)));
-    return memoryView;
-    // Copy the data buffer in a string. Since the data buffer can contain null
-    // characters ('\x00'), the string cannot be simply constructed like that:
-    //     data = std::string((char*) buffer.pData_);
-    // because it would be truncated after the first occurence of a null
-    // character. Therefore, it has to be copied character by character.
-    // First allocate the memory for the whole string...
-    
-    // skip
-    //Exiv2::DataBuf buffer = _getExifThumbnail()->copy();
-    //boost::python::list data;
-    // ... then fill it with the raw data.
-
-    //for(unsigned int i = 0; i < buffer.size_; ++i)
-    //{
-        //data.append(buffer.pData_[i]);
-    //}
-    //std::cout << buffer.pData_[0] << std::endl;
-    //return data;
+    return data;
 }
 
 
